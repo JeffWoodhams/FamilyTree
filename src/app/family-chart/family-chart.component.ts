@@ -494,7 +494,7 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
   }
   private AddIcon(xValue: number, yValue: number, iconType: string) {
     var img = new Image();
-    img.src = "../../assets/" + iconType + ".jpg";
+    img.src = "./assets/" + iconType + ".jpg";
     img.onload = () => {
       this.ctx.drawImage(img, xValue, yValue,27,20);
     };
