@@ -1,0 +1,78 @@
+
+<h2 mat-dialog-title>{{title}}</h2>
+
+<mat-dialog-content [formGroup]="form">
+    <mat-form-field>
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name">
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+        <mat-label>Surname</mat-label>
+        <input matInput formControlName="surname">
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+      <mat-label>Year of Birth</mat-label>
+      <input matInput formControlName="birthYear">
+    </mat-form-field>
+    <br>
+    <mat-form-field style="width:300px" >
+        <mat-label>Father</mat-label>
+        <mat-select formControlName="father">
+            <mat-option *ngFor="let person of people" [value] = "person.personID" >
+              {{person.personID}}
+            </mat-option>
+          </mat-select>
+    </mat-form-field>
+    <br>
+    <mat-form-field style="width:300px" >
+        <mat-label>Mother</mat-label>
+        <mat-select formControlName="mother">
+            <mat-option *ngFor="let person of people" [value] = "person.personID" >
+              {{person.personID}}
+            </mat-option>
+          </mat-select>
+    </mat-form-field>
+    <br>
+    <mat-form-field style="width:300px" >
+        <mat-label>Spouse</mat-label>
+        <mat-select formControlName="spouse">
+            <mat-option *ngFor="let person of people" [value] = "person.personID" >
+              {{person.personID}}
+            </mat-option>
+          </mat-select>
+    </mat-form-field>
+    <br>
+    <mat-form-field style="width:300px" >
+        <mat-label>Spouse 2</mat-label>
+        <mat-select formControlName="spouse2"> 
+            <mat-option *ngFor="let person of people" [value] = "person.personID" >
+              {{person.personID}}
+            </mat-option>
+          </mat-select>
+    </mat-form-field>
+    <br>
+    <mat-form-field class = widerFormField>
+      <mat-label>Image</mat-label>
+      <input matInput formControlName="personalImage">
+  </mat-form-field>
+    <br>
+    <mat-form-field style="width:300px" >
+        <mat-label>Events</mat-label>
+        <mat-select formControlName="personEvent">
+            <mat-option *ngFor="let event of events" [value] = "event.eventID" >
+              {{event.eventID}}
+            </mat-option>
+          </mat-select>
+    </mat-form-field>
+    
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button class="mat-raised-button"(click)="close()">Close</button>
+    <button class="mat-raised-button mat-primary"(click)="submit()">Submit</button>
+    <button id = "deleteButton" hidden = "true" class="mat-raised-button mat-primary"(click)="delete()">Delete</button>
+    <button id = "eventButton" class="mat-raised-button mat-primary"(click)="openCreateEvent()">Add Event</button>
+    <button id = "eventButton" class="mat-raised-button mat-primary"(click)="openEditEvent()">Edit Event</button>
+</mat-dialog-actions>

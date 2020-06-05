@@ -1,0 +1,30 @@
+<div>
+    <div class="side-bar" >
+        <h3>Filter people by:</h3>
+          <mat-form-field >
+            <mat-label>Surname</mat-label>
+            <input matInput type="text" (keyup)="doFilter($event.target.value)" placeholder="Filter">
+          </mat-form-field>
+          <br>
+          <button (click)="openAddPerson()"> Add Person</button>
+    </div>
+
+    <div class="main-area" oncontextmenu="return false;">
+        <mat-table [dataSource]="people">
+        
+            <ng-container matColumnDef="name">
+                <div *matHeaderCellDef class="header-name-cell">Name</div>
+                <div class="name-cell" *matCellDef="let people" (click)="openFamilyChart(people.personID)">{{people.name + " " + people.surname}}</div>
+            </ng-container>
+            <ng-container matColumnDef="birthYear">
+                <div *matHeaderCellDef class="header-data-cell">Born</div>
+                <div class="data-cell" *matCellDef="let people">{{people.birthYear}} </div>
+            </ng-container>
+            
+            <mat-header-row *matHeaderRowDef="displayedColumns" ></mat-header-row>
+            
+            <mat-row  *matRowDef="let row; columns: displayedColumns" (contextmenu)="openEditPerson(row.personID)" ></mat-row>
+            
+        </mat-table>
+    </div>
+</div>
