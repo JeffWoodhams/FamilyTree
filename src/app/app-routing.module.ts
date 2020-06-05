@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { PeopleListComponent } from './people-list/people-list.component';
-import { PeopleListResolver } from './people-list/people-list.resolver';
-import { FamilyChartResolver } from './family-chart/family-chart.resolver';
 import { FamilyChartComponent } from './family-chart/family-chart.component';
 
 
@@ -10,25 +8,15 @@ import { FamilyChartComponent } from './family-chart/family-chart.component';
 const routes: Routes = [
   {
     path: '',
-    component: PeopleListComponent,
-    resolve: {
-      data: PeopleListResolver
-    }
+    component: PeopleListComponent
   },
   {
     path: 'people-list/:personID',
-    component: PeopleListComponent,
-    resolve: {
-      data: PeopleListResolver
-    }
+    component: PeopleListComponent
   },
   {
     path: 'family-chart/:personID',
-    component: FamilyChartComponent,
-    resolve: {
-      data: FamilyChartResolver
-    },
-    runGuardsAndResolvers: "paramsChange"
+    component: FamilyChartComponent
   }
 ];
 
