@@ -5,6 +5,7 @@ import { AddPersonComponent } from '../add-person/add-person.component';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { EventService } from 'src/services/events.service';
+import * as peopleData from '../../assets/People.json'
 @Component({
   selector: 'people-list',
   templateUrl: './people-list.component.html',
@@ -23,17 +24,7 @@ export class PeopleListComponent implements OnInit{
     this.people.filterPredicate = (data: Person, filter: string) => {
       return data.personID.toLowerCase().startsWith(filter);
      };
-    this.route.paramMap.subscribe(route => {
-    if (route.get('personID') != null) {
-      this.doFilter(route.get('personID'));
-    }
-  });
-    this.route.data.subscribe(routeData => {
-      let data = routeData['data'];
-      if (data) {
-        this.people.data = data.people as Person[];
-      }
-    });
+    this.people.data = (peopleData as any).default;
   }
 
   openAddPerson() {

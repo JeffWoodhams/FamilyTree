@@ -6,6 +6,7 @@ import { RoutingService } from '../../services/routing.service';
 import { ThrowStmt } from '@angular/compiler';
 import { filter } from 'rxjs/operators';
 import { element } from 'protractor';
+import * as peopleData from '../../assets/People.json'
 
 @Component({
   selector: 'family-chart',
@@ -23,21 +24,19 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
         this.route.paramMap.subscribe(route => {
           this.keyID = route.get('personID')
       })
-      this.route.data.subscribe(routeData => {
-        let data = routeData['data'];
-        if (data) {
-          this.keyPerson = data.people.find(person => person.personID == this.keyID);
-          this.keySpouse = data.people.find(person => person.personID == this.keyPerson.spouseID);
-          this.keySpouse2 = data.people.find(person => person.personID == this.keyPerson.spouse2ID);
+        this.family = (peopleData as any).default;
+        if (this.family) {
+          this.keyPerson = this.family.find(person => person.personID == this.keyID);
+          this.keySpouse = this.family.find(person => person.personID == this.keyPerson.spouseID);
+          this.keySpouse2 = this.family.find(person => person.personID == this.keyPerson.spouse2ID);
           if (this.keySpouse && this.keySpouse.spouse2ID && this.keySpouse.spouse2ID != this.keyPerson.personID) {
-            this.keyPerson2 = data.people.find(person => person.personID == this.keySpouse.spouse2ID);
+            this.keyPerson2 = this.family.find(person => person.personID == this.keySpouse.spouse2ID);
           }
           this.SetIDs();
           this.childIndex = 7; this.childTextWidth = 25;
           this.xValues = [591, 1301, 759, 393, 1477, 1121, 905, 100, 300, 500, 700, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3130, 3330 ];
           this.yValues = [50, 50, 50, 50, 50, 50, 50 ];
           this.indexComplete = [false, false];
-          this.family = data.people;
           this.children = this.family.filter(person => (person.fatherID == this.ids[0] && (person.motherID == this.ids[1] || person.motherID == this.ids[6] )) 
           || ((person.motherID == this.ids[0] || person.motherID == this.ids[6] )&& person.fatherID == this.ids[1])
           || (person.motherID == this.ids[0] && person.fatherID == this.ids[6]) 
@@ -73,7 +72,7 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
           this.keyMarriage = this.keyPerson.events.find(event => event.description == "Marriage");
           if (!this.keyMarriage && this.keySpouse) this.keyMarriage = this.keySpouse.events.find(event => event.description == "Marriage");
          }
-      })
+
 
       this.ctx = this.canvas.nativeElement.getContext('2d');
       this.ctx.clearRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
