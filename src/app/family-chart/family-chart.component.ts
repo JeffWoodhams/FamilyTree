@@ -19,7 +19,6 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
 
   constructor(private route: ActivatedRoute,private modalService: ModalService, private routingService: RoutingService, private router: Router){
     this.navigationSubscription = this.router.events.subscribe((e: any) => {
-      // If it is a NavigationEnd event re-initalise the component
       if (e instanceof NavigationEnd) {
         this.route.paramMap.subscribe(route => {
           this.keyID = route.get('personID')
@@ -72,8 +71,6 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
           this.keyMarriage = this.keyPerson.events.find(event => event.description == "Marriage");
           if (!this.keyMarriage && this.keySpouse) this.keyMarriage = this.keySpouse.events.find(event => event.description == "Marriage");
          }
-
-
       this.ctx = this.canvas.nativeElement.getContext('2d');
       this.ctx.clearRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
       this.ctx.font = "15px Arial";
@@ -106,64 +103,6 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
 //#endregion
 
   ngOnInit(): void {
-/*     this.route.paramMap.subscribe(route => {
-        this.keyID = route.get('personID')
-    })
-    this.route.data.subscribe(routeData => {
-      let data = routeData['data'];
-      if (data) {
-        this.keyPerson = data.people.find(person => person.personID == this.keyID);
-        this.keySpouse = data.people.find(person => person.personID == this.keyPerson.spouseID);
-        this.keySpouse2 = data.people.find(person => person.personID == this.keyPerson.spouse2ID);
-        if (this.keySpouse && this.keySpouse.spouse2ID && this.keySpouse.spouse2ID != this.keyPerson.personID) {
-          this.keyPerson2 = data.people.find(person => person.personID == this.keySpouse.spouse2ID);
-        }
-        this.SetIDs();
-        this.family = data.people;
-        this.children = this.family.filter(person => (person.fatherID == this.ids[0] && (person.motherID == this.ids[1] || person.motherID == this.ids[6] )) 
-        || ((person.motherID == this.ids[0] || person.motherID == this.ids[6] )&& person.fatherID == this.ids[1])
-        || (this.keyPerson2 && person.motherID == this.keyPerson2.personID && person.fatherID == this.ids[1])).sort(this.PersonDateSort);
-        this.children1 = this.children.filter(child => (child.fatherID == this.ids[0] && child.motherID == this.ids[1]) 
-        || (child.motherID == this.ids[0] && child.fatherID == this.ids[1])).sort(this.PersonDateSort);
-        this.children2 = this.children.filter(child => (child.fatherID == this.ids[0] && child.motherID == this.ids[6]) 
-        || (child.motherID == this.ids[6] && child.fatherID == this.ids[1]) || (this.keyPerson2 && child.motherID == this.keyPerson2.personID && child.fatherID == this.ids[1])).sort(this.PersonDateSort);
-        if (this.children.length < 3){
-          this.xValues[7] = 500;
-          this.xValues[8] = 1300;
-          this.childWidth = 300
-          this.childTextWidth = 40;
-        }
-        else if (this.children.length < 5){
-          this.xValues[7] = 200;
-          this.xValues[8] = 560;
-          this.xValues[9] = 1320;
-          this.xValues[10] = 1680;
-          this.childWidth = 300;
-          this.childTextWidth = 40;
-        }
-        else if (this.children.length < 7){
-          this.xValues[7] = 130;
-          this.xValues[8] = 380;
-          this.xValues[9] = 630;
-          this.xValues[10] = 1260;
-          this.xValues[11] = 1510;
-          this.xValues[12] = 1760;
-          this.childWidth = 200;
-          this.childTextWidth = 30;
-        }
-        this.keyMarriage = this.keyPerson.events.find(event => event.description == "Marriage");
-        if (!this.keyMarriage && this.keySpouse) this.keyMarriage = this.keySpouse.events.find(event => event.description == "Marriage");
-       }
-    })
-    this.ctx = this.canvas.nativeElement.getContext('2d');
-    this.ctx.font = "15px Arial";
-    this.Parents();
-    this.KeyPeople();
-    this.KeySingleData();
-    if (this.keyMarriage) {
-      this.KeyPeopleMarriage();
-      this.MarriedData();
-    } */
   }
   ngOnDestroy() {
     // avoid memory leaks here by cleaning up after ourselves. If we  
