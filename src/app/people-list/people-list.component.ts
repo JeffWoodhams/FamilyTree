@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Event, Person } from 'sdk';
+import { Person } from 'sdk';
 import { ActivatedRoute, Router } from '@angular/router';
-import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import * as peopleData from '../../assets/People.json'
 @Component({
@@ -15,7 +14,7 @@ export class PeopleListComponent implements OnInit{
   displayedColumns = ["name", "birthYear"];
   public people = new MatTableDataSource<Person>(); 
 
-  constructor(private route: ActivatedRoute, private router: Router, private dialog: MatDialog){}
+  constructor(private route: ActivatedRoute, private router: Router){}
 
 
   ngOnInit(): void {
