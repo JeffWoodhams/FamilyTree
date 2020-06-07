@@ -3,7 +3,7 @@ import { Person, Event } from 'sdk';
 import { ActivatedRoute, Router, RouterEvent, NavigationEnd } from '@angular/router';
 import { ModalService } from '../_modal'
 import { RoutingService } from '../../services/routing.service';
-import { ThrowStmt } from '@angular/compiler';
+import { ThrowStmt, HtmlAstPath } from '@angular/compiler';
 import { filter } from 'rxjs/operators';
 import { element } from 'protractor';
 import * as peopleData from '../../assets/People.json'
@@ -15,7 +15,6 @@ import * as peopleData from '../../assets/People.json'
 })
 
 export class FamilyChartComponent implements OnInit, OnDestroy{
-  navigationSubscription: any;
 
   constructor(private route: ActivatedRoute,private modalService: ModalService, private routingService: RoutingService, private router: Router){
     this.navigationSubscription = this.router.events.subscribe((e: any) => {
@@ -23,54 +22,53 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
         this.route.paramMap.subscribe(route => {
           this.keyID = route.get('personID')
       })
-        this.family = (peopleData as any).default;
-        if (this.family) {
-          this.keyPerson = this.family.find(person => person.personID == this.keyID);
-          this.keySpouse = this.family.find(person => person.personID == this.keyPerson.spouseID);
-          this.keySpouse2 = this.family.find(person => person.personID == this.keyPerson.spouse2ID);
-          if (this.keySpouse && this.keySpouse.spouse2ID && this.keySpouse.spouse2ID != this.keyPerson.personID) {
-            this.keyPerson2 = this.family.find(person => person.personID == this.keySpouse.spouse2ID);
-          }
-          this.SetIDs();
-          this.childIndex = 7; this.childTextWidth = 25;
-          this.xValues = [591, 1301, 759, 393, 1477, 1121, 905, 100, 300, 500, 700, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3130, 3330 ];
-          this.yValues = [50, 50, 50, 50, 50, 50, 50 ];
-          this.indexComplete = [false, false];
-          this.children = this.family.filter(person => (person.fatherID == this.ids[0] && (person.motherID == this.ids[1] || person.motherID == this.ids[6] )) 
-          || ((person.motherID == this.ids[0] || person.motherID == this.ids[6] )&& person.fatherID == this.ids[1])
-          || (person.motherID == this.ids[0] && person.fatherID == this.ids[6]) 
-          || (this.keyPerson2 && person.motherID == this.keyPerson2.personID && person.fatherID == this.ids[1])).sort(this.PersonDateSort);
-          this.children1 = this.children.filter(child => (child.fatherID == this.ids[0] && child.motherID == this.ids[1]) 
-          || (child.motherID == this.ids[0] && child.fatherID == this.ids[1])).sort(this.PersonDateSort);
-          this.children2 = this.children.filter(child => (child.fatherID == this.ids[0] && child.motherID == this.ids[6]) || (child.motherID == this.ids[0] && child.fatherID == this.ids[6]) 
-          || (child.motherID == this.ids[6] && child.fatherID == this.ids[1]) || (this.keyPerson2 && child.motherID == this.keyPerson2.personID && child.fatherID == this.ids[1])).sort(this.PersonDateSort);
-          if (this.children.length < 3){
-            this.xValues[7] = 500;
-            this.xValues[8] = 1300;
-            this.childWidth = 300
-            this.childTextWidth = 40;
-          }
-          else if (this.children.length < 5){
-            this.xValues[7] = 200;
-            this.xValues[8] = 560;
-            this.xValues[9] = 1320;
-            this.xValues[10] = 1680;
-            this.childWidth = 300;
-            this.childTextWidth = 40;
-          }
-          else if (this.children.length < 7){
-            this.xValues[7] = 130;
-            this.xValues[8] = 380;
-            this.xValues[9] = 630;
-            this.xValues[10] = 1260;
-            this.xValues[11] = 1510;
-            this.xValues[12] = 1760;
-            this.childWidth = 200;
-            this.childTextWidth = 30;
-          }
-          this.keyMarriage = this.keyPerson.events.find(event => event.description == "Marriage");
-          if (!this.keyMarriage && this.keySpouse) this.keyMarriage = this.keySpouse.events.find(event => event.description == "Marriage");
-         }
+      this.family = (peopleData as any).default;
+      if (this.family) {
+        this.keyPerson = this.family.find(person => person.personID == this.keyID);
+        this.keySpouse = this.family.find(person => person.personID == this.keyPerson.spouseID);
+        this.keySpouse2 = this.family.find(person => person.personID == this.keyPerson.spouse2ID);
+        if (this.keySpouse && this.keySpouse.spouse2ID && this.keySpouse.spouse2ID != this.keyPerson.personID) {
+          this.keyPerson2 = this.family.find(person => person.personID == this.keySpouse.spouse2ID);
+        }
+        this.SetIDs();
+        this.childIndex = 7; this.childTextWidth = 25;
+        this.xValues = [591, 1301, 759, 393, 1477, 1121, 905, 100, 300, 500, 700, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3130, 3330 ];
+        this.yValues = [50, 50, 50, 50, 50, 50, 50 ];
+        this.indexComplete = [false, false];
+        this.children = this.family.filter(person => (person.fatherID == this.ids[0] && (person.motherID == this.ids[1] || person.motherID == this.ids[6] )) 
+        || ((person.motherID == this.ids[0] || person.motherID == this.ids[6] )&& person.fatherID == this.ids[1])
+        || (this.keyPerson2 && person.motherID == this.keyPerson2.personID && person.fatherID == this.ids[1])).sort(this.PersonDateSort);
+        this.children1 = this.children.filter(child => (child.fatherID == this.ids[0] && child.motherID == this.ids[1]) 
+        || (child.motherID == this.ids[0] && child.fatherID == this.ids[1])).sort(this.PersonDateSort);
+        this.children2 = this.children.filter(child => (child.fatherID == this.ids[0] && child.motherID == this.ids[6]) || (child.motherID == this.ids[0] && child.fatherID == this.ids[6]) 
+        || (child.motherID == this.ids[6] && child.fatherID == this.ids[1]) || (this.keyPerson2 && child.motherID == this.keyPerson2.personID && child.fatherID == this.ids[1])).sort(this.PersonDateSort);
+        if (this.children.length < 3){
+          this.xValues[7] = 500;
+          this.xValues[8] = 1300;
+          this.childWidth = 300
+          this.childTextWidth = 40;
+        }
+        else if (this.children.length < 5){
+          this.xValues[7] = 200;
+          this.xValues[8] = 560;
+          this.xValues[9] = 1320;
+          this.xValues[10] = 1680;
+          this.childWidth = 300;
+          this.childTextWidth = 40;
+        }
+        else if (this.children.length < 7){
+          this.xValues[7] = 130;
+          this.xValues[8] = 380;
+          this.xValues[9] = 630;
+          this.xValues[10] = 1260;
+          this.xValues[11] = 1510;
+          this.xValues[12] = 1760;
+          this.childWidth = 200;
+          this.childTextWidth = 30;
+        }
+        this.keyMarriage = this.keyPerson.events.find(event => event.description == "Marriage");
+        if (!this.keyMarriage && this.keySpouse) this.keyMarriage = this.keySpouse.events.find(event => event.description == "Marriage");
+      }
       this.ctx = this.canvas.nativeElement.getContext('2d');
       this.ctx.clearRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
       this.ctx.font = "15px Arial";
@@ -85,8 +83,8 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
     });
   }
 //#region Variablea
-  @ViewChild('canvas', { static: true })
-  canvas: ElementRef<HTMLCanvasElement>; marriage: ElementRef<HTMLImageElement>;
+  @ViewChild('canvas', { static: true})
+  canvas: ElementRef<HTMLCanvasElement>;
   private ctx: CanvasRenderingContext2D; 
   private parentWidth: number = 175; private keyWidth: number = 350; private childWidth: number = 180;
   private line: number = 20; private keyID: string;
@@ -99,7 +97,7 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
   private eventTypes: string[] = ["Birth", "Christening", "Death", "Funeral", "Marriage", "Marriage2"];
   private prefixes: string[] = ["Born", "Christened", "Died", "Buried", "Married", "Married"];
   private keyMarriage: Event; private indexComplete: boolean[] = [false, false]
-
+  private navigationSubscription: any;
 //#endregion
 
   ngOnInit(): void {
@@ -239,7 +237,7 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
           spouseIndex = 1;
         }
       }
-      else{
+      else {
         if (event.single == true && 
           (event.personID == this.keySpouse.personID || (this.keySpouse2 && event.personID == this.keySpouse2.personID)|| (this.keyPerson2 && event.personID == this.keyPerson2.personID))) {
           this.yValues[1] += this.line;
@@ -264,8 +262,8 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
         this.AddRoutingClick(this.xValues[this.childIndex] - this.childWidth/2, this.yValues[this.childIndex], this.routingService, child.personID)
         this.yValues[this.childIndex] += 0.5 * this.line;
         this.ChildLineSeparator();
-        var {spouse, spouse2 } = this.SpouseEvents(child);
-        child.events.sort(this.EventDateSort).forEach(event =>{
+        var {spouse, spouse2, childEvents } = this.SpouseEvents(child);
+        childEvents.sort(this.EventDateSort).forEach(event =>{
           if ( this.eventTypes.includes(event.description)){
             if (event.description == "Marriage") {
               this.yValues[this.childIndex] += 2 * this.line;
@@ -290,7 +288,7 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
           else {
             this.EventDisplay(event, this.childIndex, this.childWidth, "top", true);
           }
-          if (child.events.indexOf(event) != child.events.length - 1) this.ChildLineSeparator();
+          if (childEvents.indexOf(event) != childEvents.length - 1) this.ChildLineSeparator();
         });
         this.childIndex++;
       });
@@ -377,7 +375,7 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
     this.ctx.font = "15px Arial";
   }
   private PrepareEvents() {
-    var events = this.keyPerson.events.filter(event => new Date(event.date) > new Date(this.keyMarriage.date));
+    var events: Event[] = this.keyPerson.events.filter(event => new Date(event.date) > new Date(this.keyMarriage.date)).slice();
     var children: Person[] = this.children1;
     for (let i = 0; i <= 1; i++) {
       if (children.length > 0 && children[0].events.find(event => event.description == "Birth")) {
@@ -408,21 +406,22 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
     return events;
   }
   private SpouseEvents(child: Person) {
+    var childEvents: Event[] = child.events.slice();
     var spouse = this.family.find(person => person.personID == child.spouseID);
     if (spouse) {
       if (!child.events.find(event => event.description == "Marriage")) {
         var marriage = spouse.events.find(event => event.description == "Marriage");
-        if (marriage) child.events.push(marriage);
+        if (marriage) childEvents.push(marriage);
       }
       var spouseDeath = spouse.events.find(event => event.description == "Death");
-      if (spouseDeath) child.events.push(spouseDeath); 
+      if (spouseDeath) childEvents.push(spouseDeath); 
     }
     var spouse2 = this.family.find(person => person.personID == child.spouse2ID);
     if (spouse2) {
-    var spouse2Death = spouse2.events.find(event => event.description == "Death");
-    if (spouse2Death) child.events.push(spouse2Death);
+      var spouse2Death = spouse2.events.find(event => event.description == "Death");
+      if (spouse2Death) childEvents.push(spouse2Death);
     }
-    return { spouse, spouse2 };
+    return { spouse, spouse2, childEvents };
   }
 //#endregion
 
@@ -457,6 +456,7 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
       }
     }, false);
   }
+
   private AddRoutingClick(xValue: number, yValue: number, routingService: RoutingService, personID: string) {
     var drawCanvas = this.ctx.canvas, elements = [];
     elements.push({
@@ -467,15 +467,6 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
       person: personID
     });
     drawCanvas.addEventListener('click', function (event) {
-      var xVal = event.pageX, yVal = event.pageY;
-      for (let ele of elements){
-        if (yVal > ele.top && yVal < ele.top + ele.height && xVal > ele.left && xVal < ele.left + ele.width) {
-          routingService.open(ele.person);
-          break
-        }
-      }
-    }, false);
-    drawCanvas.addEventListener('contextmenu', function (event) {
       var xVal = event.pageX, yVal = event.pageY;
       for (let ele of elements){
         if (yVal > ele.top && yVal < ele.top + ele.height && xVal > ele.left && xVal < ele.left + ele.width) {

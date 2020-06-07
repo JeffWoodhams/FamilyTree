@@ -18,6 +18,12 @@ export class PeopleListComponent implements OnInit{
 
 
   ngOnInit(): void {
+    this.route.paramMap.subscribe(route => {
+      if (route.get('personID') != null) {
+        this.doFilter(route.get('personID'));
+        this.router.navigate(['family-chart/',route.get('personID')]);
+      }
+    });
     this.people.filterPredicate = (data: Person, filter: string) => {
       return data.personID.toLowerCase().startsWith(filter);
      };
