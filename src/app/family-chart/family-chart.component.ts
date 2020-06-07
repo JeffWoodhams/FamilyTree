@@ -163,7 +163,7 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
         this.PersonDisplay(person, i, this.parentWidth/2, "left");
         this.AddRoutingClick(this.xValues[i] - this.parentWidth/2, this.yValues[i], this.routingService, person.personID)
       }
-      this.yValues[i] += 0.5 * this.line;
+      this.yValues[i] += 0.5*this.line;
      }
   }
   private KeySingleData(){
