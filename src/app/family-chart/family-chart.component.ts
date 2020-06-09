@@ -48,7 +48,7 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
           || (child.motherID == this.ids[6] && child.fatherID == this.ids[1]) || (this.keyPerson2 && child.motherID == this.keyPerson2.personID && child.fatherID == this.ids[1])).sort(this.PersonDateSort);
           if (this.children.length < 3){
             this.xValues[7] = 500;
-            this.xValues[8] = 1300;
+            this.xValues[8] = 1500;
             this.childWidth = 300
             this.childTextWidth = 40;
           }
