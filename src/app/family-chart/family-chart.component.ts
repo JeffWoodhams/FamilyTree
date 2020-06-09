@@ -146,7 +146,7 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
       var person = this.family.find(person => person.personID == this.ids[i + 1]);
       if (person){
         this.ParentLinesDraw(startYValue, i);
-        if (person.spouseID == this.keyPerson.motherID || person.spouseID == this.keySpouse.motherID) {
+        if (this.keySpouse && (person.spouseID == this.keyPerson.motherID || person.spouseID == this.keySpouse.motherID)) {
           var marriage = person.events.find(event => event.description == "Marriage")
         }
         else{
