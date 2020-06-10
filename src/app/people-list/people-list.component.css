@@ -15,14 +15,9 @@
     width: 100px;
     padding: 0px;
 }
-.side-bar{
-    float: left;
-    top:0;
-    width: 300px;
-    padding: 50px;
-}
 .main-area{
     width: 400px;
     height:800px;
+    padding-left: 100px;
     float: left;
 }

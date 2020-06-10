@@ -20,12 +20,14 @@ import { DatePipe } from '@angular/common';
 import { MatNativeDateModule, MAT_DATE_LOCALE} from '@angular/material/core';
 import { MatCheckboxModule} from '@angular/material/checkbox';
 import { MatAutocompleteModule} from '@angular/material/autocomplete';
+import { FamilyCircleComponent } from './family-circle/family-circle.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     PeopleListComponent,
-    FamilyChartComponent
+    FamilyChartComponent,
+    FamilyCircleComponent
   ],
   imports: [
     ReactiveFormsModule,

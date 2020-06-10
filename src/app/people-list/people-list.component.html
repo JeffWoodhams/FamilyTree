@@ -1,18 +1,10 @@
 <div>
-    <div class="side-bar" >
-        <h3>Filter people by:</h3>
-          <mat-form-field >
-            <mat-label>Name</mat-label>
-            <input matInput type="text" (keyup)="doFilter($event.target.value)">
-          </mat-form-field>
-    </div>
-
     <div class="main-area" oncontextmenu="return false;">
         <mat-table [dataSource]="people">
         
             <ng-container matColumnDef="name">
                 <div *matHeaderCellDef class="header-name-cell">Name</div>
-                <div class="name-cell" *matCellDef="let people" (click)="openFamilyChart(people.personID)">{{people.name + " " + people.surname}}</div>
+                <div class="name-cell" *matCellDef="let people" (click)="openFamilyCircle(people.personID)">{{people.name + " " + people.surname}}</div>
             </ng-container>
             <ng-container matColumnDef="birthYear">
                 <div *matHeaderCellDef class="header-data-cell">Born</div>
