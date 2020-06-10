@@ -1,22 +1,25 @@
 import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot } from "@angular/router";
+import { Resolve, ActivatedRouteSnapshot, NavigationStart } from "@angular/router";
 import { PeopleService } from '../../services/people.service';
 
 @Injectable()
-export class PeopleListResolver implements Resolve<any> {
+export class FamilyCircleResolver implements Resolve<any> {
 
   constructor(
     private peopleService: PeopleService
   ) { }
 
+
   resolve(route: ActivatedRouteSnapshot) {
  
+    let keyID = route.paramMap.get('personID')
+
     return new Promise((resolve, reject) => {
-      this.peopleService.getKeyPeople()
-      .then(people => {
-        return resolve({
-          people: people
-        });
+      this.peopleService.getFamily(keyID)
+        .then(people => {
+          return resolve({
+            people : people
+          });
       },
       err => {
         console.log(err);

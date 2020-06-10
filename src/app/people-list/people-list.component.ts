@@ -66,6 +66,9 @@ export class PeopleListComponent implements OnInit{
   openFamilyChart(personID: string) {
     this.router.navigate(['family-chart/',personID]);
   }
+  openFamilyCircle(personID: string) {
+    this.router.navigate(['family-circle/',personID]);
+  }
   public doFilter = (value: string) => {
     this.people.filter = value.toLowerCase();
   }

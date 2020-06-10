@@ -4,8 +4,7 @@ import { PeopleListComponent } from './people-list/people-list.component';
 import { PeopleListResolver } from './people-list/people-list.resolver';
 import { FamilyChartResolver } from './family-chart/family-chart.resolver';
 import { FamilyChartComponent } from './family-chart/family-chart.component';
-
-
+import { FamilyCircleComponent } from './family-circle/family-circle.component';
 
 const routes: Routes = [
   {
@@ -25,6 +24,14 @@ const routes: Routes = [
   {
     path: 'family-chart/:personID',
     component: FamilyChartComponent,
+    resolve: {
+      data: FamilyChartResolver
+    },
+    runGuardsAndResolvers: "paramsChange"
+  },
+  {
+    path: 'family-circle/:personID',
+    component: FamilyCircleComponent,
     resolve: {
       data: FamilyChartResolver
     },
