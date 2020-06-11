@@ -14,7 +14,7 @@
         
             <ng-container matColumnDef="name">
                 <div *matHeaderCellDef class="header-name-cell">Name</div>
-                <div class="name-cell" *matCellDef="let people" (click)="openFamilyCircle(people.personID)">{{people.name + " " + people.surname}}</div>
+                <div class="name-cell" *matCellDef="let people" (click)="openFamilyChart(people.personID)">{{people.name + " " + people.surname}}</div>
             </ng-container>
             <ng-container matColumnDef="birthYear">
                 <div *matHeaderCellDef class="header-data-cell">Born</div>

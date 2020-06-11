@@ -12,7 +12,7 @@ export class PeopleListResolver implements Resolve<any> {
   resolve(route: ActivatedRouteSnapshot) {
  
     return new Promise((resolve, reject) => {
-      this.peopleService.getKeyPeople()
+      this.peopleService.getPeople()
       .then(people => {
         return resolve({
           people: people

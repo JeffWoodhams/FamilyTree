@@ -13,7 +13,6 @@ import { SocketDriver } from 'sdk/sockets/socket.driver';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { FamilyChartComponent } from './family-chart/family-chart.component';
 import { FamilyChartResolver } from './family-chart/family-chart.resolver';
-import { FamilyCircleResolver } from './family-circle/family-circle.resolver';
 import { AddPersonComponent } from './add-person/add-person.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatDialogModule} from '@angular/material/dialog';
@@ -59,7 +58,6 @@ import { FamilyCircleComponent } from './family-circle/family-circle.component';
     PeopleService,
     PeopleListResolver,
     FamilyChartResolver,
-    FamilyCircleResolver,
     EventApi,
     PersonApi,
     HttpClient,

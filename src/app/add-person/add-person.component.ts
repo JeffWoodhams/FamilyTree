@@ -55,7 +55,6 @@ export class AddPersonComponent implements OnInit {
     }
     this.people = data.people;
     this.isCreate = data.isCreate;
-    this.imageModals.sort();
   }
 
   ngOnInit(): void {
@@ -85,6 +84,14 @@ export class AddPersonComponent implements OnInit {
           this.placeList.push(event.place)
         }
         this.placeList.sort();
+        if (event.images) {
+          for (let image of event.images) {
+            if (!this.imageModals.includes(image.image)) {
+              this.imageModals.push(image.image);
+            }
+          }
+        }
+        this.imageModals.sort();
       });
     });
   }
