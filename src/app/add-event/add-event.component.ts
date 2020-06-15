@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialogRef, MatDialog} from "@angular/material/dialog";
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule, DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
@@ -35,10 +35,11 @@ export class AddEventComponent implements OnInit {
   people: Person[];
   isCreate: boolean;
   types: string[] = ["Census","Birth","Christening","Marriage","Death","Funeral","Marriage2", ""];
-  imageTypes: string[] = ["Census","Birth","Death","Map","Marriage", "Photo", ""];
+  imageTypes: string[] = ["Census","Birth","Death","Map","Marriage", "Photo","Document","Newspaper","Memory",""];
   filteredModals1: Observable<string[]>;
   filteredModals2: Observable<string[]>;
   filteredModals3: Observable<string[]>;
+  filteredModals4: Observable<string[]>;
   type: string;
   customType: string;
   imageModals: string[] = [];
@@ -48,6 +49,8 @@ export class AddEventComponent implements OnInit {
   image2 = new FormControl();
   imageType3: string;
   image3 = new FormControl();
+  imageType4: string;
+  image4 = new FormControl();
   title: string;
   suffix: number;
 //#endregion
@@ -85,9 +88,13 @@ export class AddEventComponent implements OnInit {
           this.imageType2 = data.currentEvent.images[1].type;
           this.image2.setValue(data.currentEvent.images[1].image);
         }
-        if (data.currentEvent.images.length == 3) {
+        if (data.currentEvent.images.length >= 3) {
           this.imageType3 = data.currentEvent.images[2].type;
           this.image3.setValue(data.currentEvent.images[2].image);
+        }
+        if (data.currentEvent.images.length >= 4) {
+          this.imageType4 = data.currentEvent.images[3].type;
+          this.image4.setValue(data.currentEvent.images[3].image);
         }
       }
     }
@@ -108,9 +115,11 @@ export class AddEventComponent implements OnInit {
       image1:this.image1,
       image2:this.image2,
       image3:this.image3,
+      image4:this.image4,
       imageType1:this.imageType1,
       imageType2:this.imageType2,
-      imageType3:this.imageType3
+      imageType3:this.imageType3,
+      imageType4:this.imageType4
     });
 
     if (this.isCreate){
@@ -132,6 +141,11 @@ export class AddEventComponent implements OnInit {
       map(value => this._imageFilter(value))
     );
     this.filteredModals3 = this.image3.valueChanges
+    .pipe(
+      startWith(''),
+      map(value => this._imageFilter(value))
+    );
+    this.filteredModals4 = this.image4.valueChanges
     .pipe(
       startWith(''),
       map(value => this._imageFilter(value))
@@ -197,7 +211,11 @@ export class AddEventComponent implements OnInit {
       let image = values.image3;
       data.images.push({type, image});
     }
-
+    if (values.image4 != null && values.image4 != "") {
+      let type = values.imageType4;
+      let image = values.image4;
+      data.images.push({type, image});
+    }
     const promise = this.eventService.upsertEvent(data);
     promise.then(() =>{
       this.dialogRef.close(this.form.value);

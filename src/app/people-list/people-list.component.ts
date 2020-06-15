@@ -25,6 +25,7 @@ export class PeopleListComponent implements OnInit{
      };
     this.route.paramMap.subscribe(route => {
     if (route.get('personID') != null) {
+      this.doFilter(route.get('personID'));
       this.openEditPerson(route.get('personID'));
     }
   });

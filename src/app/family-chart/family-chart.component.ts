@@ -244,18 +244,23 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
         }
       }
       else{
-        if (event.single == true && 
-          (event.personID == this.keySpouse.personID || (this.keySpouse2 && event.personID == this.keySpouse2.personID)|| (this.keyPerson2 && event.personID == this.keyPerson2.personID))) {
-          this.yValues[1] += this.line;
-          this.EventDisplay(event, 1, 0, "top");
+        if (event.single == true) {
+          if (event.personID == this.keySpouse.personID || (this.keySpouse2 && event.personID == this.keySpouse2.personID)) {
+            this.yValues[1] += this.line;
+            this.EventDisplay(event, 1, 0, "top");
+          }
+          else {
+            this.yValues[0] += this.line;
+            this.EventDisplay(event, 0, this.parentWidth, "top");
+            spouseIndex = 1;
+          }
         }
         else {
           this.yValues[0] += this.line;
           this.EventDisplay(event, 0, this.parentWidth, "top");
-          spouseIndex = 1;
         }
       }
-      this.KeyPeopleBalance();
+    this.KeyPeopleBalance();
       this.VerticalLinks(events, event, spouseIndex, prevYValues);
     })
   }
@@ -598,7 +603,13 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
   private VerticalLinks(events: Event[], event: Event, spouseIndex: number, prevYValues: number[]) {
     let keyIndex = 0;
     let latestIndex = events.indexOf(event);
-    var remainingEvents = events.filter(event => events.indexOf(event) > latestIndex && (event.personID == this.ids[spouseIndex] || event.personID == this.ids[6]));
+    var remainingEvents = [];
+    if (spouseIndex == 1) {
+        remainingEvents = events.filter(event => events.indexOf(event) > latestIndex && (event.personID == this.ids[1] || event.personID == this.ids[6]));
+    }
+    else {
+      remainingEvents = events.filter(event => events.indexOf(event) > latestIndex && (event.personID == this.ids[0] || (this.keyPerson2 && event.personID == this.keyPerson2.personID)));
+    }
     if (event.single) {
       if (spouseIndex == 0)
         keyIndex = 1;
@@ -607,8 +618,14 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
         this.ctx.lineTo(this.xValues[spouseIndex], this.yValues[keyIndex]);
       }
     }
-    remainingEvents = events.filter(event => events.indexOf(event) > latestIndex && 
-                (event.personID == this.ids[keyIndex] || event.personID == this.ids[6] || (this.keyPerson2 && event.personID == this.keyPerson2.personID)));
+    if (event.personID == this.ids[0]) remainingEvents = events.filter(event => events.indexOf(event) > latestIndex 
+                                                                      && (event.personID == this.ids[0] || (this.keyPerson2 && event.personID == this.keyPerson2.personID)));
+    else if (this.keyPerson2 && event.personID == this.keyPerson2.personID) remainingEvents  = events.filter(event => events.indexOf(event) > latestIndex 
+                                                                      && event.personID == this.keyPerson2.personID);
+    else if (event.personID == this.ids[1]) remainingEvents  = events.filter(event => events.indexOf(event) > latestIndex
+                                                                      && (event.personID == this.ids[1] || (this.keySpouse2 && event.personID == this.keySpouse2.personID)));
+    else if (this.keySpouse2 && event.personID == this.keySpouse2.personID) remainingEvents  = events.filter(event => events.indexOf(event) > latestIndex
+                                                                      && event.personID == this.keySpouse2.personID);
     if (remainingEvents.length == 0)
       this.indexComplete[keyIndex] = true;
     if (latestIndex != events.length - 1)

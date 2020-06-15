@@ -1,7 +1,6 @@
 
 <h2 mat-dialog-title>{{title}}</h2>
-
-<mat-dialog-content [formGroup]="form" maxWidth = "800">
+<mat-dialog-content [formGroup]="form">
     <mat-form-field >
         <mat-label>Type</mat-label>
         <mat-select formControlName="type">
@@ -86,6 +85,19 @@
         <mat-label>Image</mat-label>
         <input type="text" matInput [formControl]="image3" [matAutocomplete]="imageAuto3">
     </mat-form-field>
+    <br>
+    <mat-form-field>
+      <mat-label>Type</mat-label>
+      <mat-select formControlName="imageType4">
+          <mat-option *ngFor="let imageType of imageTypes" [value] = "imageType" >
+            {{imageType}}
+          </mat-option>
+        </mat-select>
+  </mat-form-field>
+  <mat-form-field class = widerFormField>
+      <mat-label>Image</mat-label>
+      <input type="text" matInput [formControl]="image4" [matAutocomplete]="imageAuto4">
+  </mat-form-field>
     <mat-autocomplete #imageAuto1="matAutocomplete">
       <mat-option *ngFor="let modal of filteredModals1 | async" [value] = "modal" >
         {{modal}}
@@ -101,6 +113,11 @@
         {{modal}}
       </mat-option>
     </mat-autocomplete>
+    <mat-autocomplete #imageAuto4="matAutocomplete">
+      <mat-option *ngFor="let modal of filteredModals4 | async" [value] = "modal" >
+        {{modal}}
+      </mat-option>
+    </mat-autocomplete>
     <mat-autocomplete #placeAuto="matAutocomplete">
       <mat-option *ngFor="let site of filteredPlaces | async" [value] = "site" >
         {{site}}
@@ -112,3 +129,5 @@
     <button class="mat-raised-button"(click)="close()">Close</button>
     <button class="mat-raised-button mat-primary"(click)="submit()">Submit</button>
 </mat-dialog-actions>
+
+
