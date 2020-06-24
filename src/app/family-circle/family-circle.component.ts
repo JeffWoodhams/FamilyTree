@@ -4,6 +4,7 @@ import { RoutingService } from 'src/services/routing.service';
 import { Person } from 'sdk';
 import { start } from 'repl';
 import { count } from 'console';
+import * as peopleData from '../../assets/People.json'
 
 @Component({
   selector: 'app-family-circle',
@@ -29,12 +30,7 @@ private count2: number = 3;private count3: number = 5;private count4: number = 9
     this.navigationSubscription = this.router.events.subscribe((e: any) => {
       // If it is a NavigationEnd event re-initalise the component
       if (e instanceof NavigationEnd) {
-        this.route.data.subscribe(routeData => {
-          let data = routeData['data'];
-          if (data) {
-            this.family = data.people;
-          }
-        })
+        this.family = (peopleData as any).default;
         this.ctx = this.canvas.nativeElement.getContext('2d');
         this.ctx.clearRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
         this.ctx.fillStyle = "Linen";

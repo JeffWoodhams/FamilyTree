@@ -2,7 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { PeopleListComponent } from './people-list/people-list.component';
 import { EventApi, PersonApi, SDKModels, LoopBackAuth, InternalStorage } from 'sdk';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { SocketConnection } from 'sdk/sockets/socket.connections';
@@ -25,7 +24,6 @@ import { FamilyCircleComponent } from './family-circle/family-circle.component';
 @NgModule({
   declarations: [
     AppComponent,
-    PeopleListComponent,
     FamilyChartComponent,
     FamilyCircleComponent
   ],
