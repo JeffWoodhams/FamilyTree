@@ -387,8 +387,8 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
     var events: Event[] = this.keyPerson.events.filter(event => new Date(event.date) > new Date(this.keyMarriage.date)).slice();
     var children: Person[] = this.children1;
     for (let i = 0; i <= 1; i++) {
-      if (children.length > 0 && children[0].events.find(event => event.description == "Birth")) {
-        var birthDate: Date = children[0].events.find(event => event.description == "Birth").date;
+      if (children.length > 0 && children[0].events.find(event => event.description == "Birth" || event.description == "Christening")) {
+        var birthDate: Date = children[0].events.find(event => event.description == "Birth" || event.description == "Christening").date;
         var childStart = new Event();
         childStart.description = "ChildStart";
         childStart.date = birthDate;
