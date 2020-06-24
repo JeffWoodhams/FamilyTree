@@ -71,6 +71,10 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
       }
       this.ctx = this.canvas.nativeElement.getContext('2d');
       this.ctx.clearRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
+      this.ctx.fillStyle = "Linen";
+      this.ctx.fillRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
+      this.ctx.fillStyle = "DarkBlue";
+      this.ctx.strokeStyle = "Plum";
       this.ctx.font = "15px Arial";
       this.Parents();
       this.KeyPeople();

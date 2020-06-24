@@ -2,7 +2,8 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { RoutingService } from 'src/services/routing.service';
 import { Person } from 'sdk';
-import * as peopleData from '../../assets/People.json'
+import { start } from 'repl';
+import { count } from 'console';
 
 @Component({
   selector: 'app-family-circle',
@@ -13,118 +14,138 @@ export class FamilyCircleComponent implements OnInit {
 //#region Variablea
 @ViewChild('canvas', { static: true })
 canvas: ElementRef<HTMLCanvasElement>;
-private ctx: CanvasRenderingContext2D; private line: number = 20; 
-private keyID: string; private family: Person[]; private generation1: Person[];private generation2: Person[];private generation3: Person[];private generation4: Person[];
-private xCentre: number = 900; private yCentre: number = 500;
+private ctx: CanvasRenderingContext2D; 
+private drawWidth: number = 1900; private drawHeight: number = 900;
 navigationSubscription: any;
+private family: Person[];
+private xPosn: number; private yPosn: number; private prevxPosn2: number; private prevyPosn2: number;private prevxPosn3: number; private prevyPosn3: number;
+number;private prevxPosn4: number; private prevyPosn4: number;
+private upDown: number = -1; private ySeparation  = 55; private line: number = 15;
+private startPersonID: string = "SheilaMaryPreece1953"; private currentPerson: Person; private previousPerson2: Person;private previousPerson3: Person;private previousPerson4: Person;
+private count2: number = 3;private count3: number = 5;private count4: number = 9;
 //#endregion
 
   constructor(private route: ActivatedRoute, private routingService: RoutingService, private router: Router){
     this.navigationSubscription = this.router.events.subscribe((e: any) => {
       // If it is a NavigationEnd event re-initalise the component
       if (e instanceof NavigationEnd) {
-        this.route.paramMap.subscribe(route => {
-          this.keyID = route.get('personID')
+        this.route.data.subscribe(routeData => {
+          let data = routeData['data'];
+          if (data) {
+            this.family = data.people;
+          }
         })
-        this.family = (peopleData as any).default;
         this.ctx = this.canvas.nativeElement.getContext('2d');
         this.ctx.clearRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
+        this.ctx.fillStyle = "Linen";
+        this.ctx.fillRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
+        this.ctx.font = "24px Arial";
+        this.ctx.textAlign = "center";
+        this.ctx.fillStyle = "RebeccaPurple";
+        this.ctx.fillText("Welcome to the Preece - Woodhams Family Tree", this.drawWidth/2, 40);
+        this.ctx.font = "18px Arial";
+        this.ctx.fillText("Please click on a name in the tree to start a more detailed exploration", this.drawWidth/2, 70);
         this.ctx.font = "15px Arial";
-        this.DrawGenerations(this.keyID);
+        this.DrawGenerations();
       }
     });
   }
   ngOnInit(): void {
   }
-  private DrawGenerations(personID: string) {
-    this.generation1 = [];
-    this.generation2 = [];
-    this.generation3 = [];
-    var currentPerson = this.family.find(person => person.personID == personID);
-    this.PersonDisplay(currentPerson,this.xCentre,this.yCentre);
-    var mother = this.family.find(person => person.personID == currentPerson.motherID);
-    if (mother) {
-      this.generation1.push(mother);
-      this.PersonDisplay(mother,this.xCentre,this.yCentre - 50);
-      this.StraightConnect(this.xCentre + 50, this.yCentre - 45, this.xCentre + 50, this.yCentre - 15);
-    }
-    var father= this.family.find(person => person.personID == currentPerson.fatherID);
-    if (father) {
-      this.generation1.push(father);
-      this.PersonDisplay(father,this.xCentre,this.yCentre + 50);
-      this.StraightConnect(this.xCentre + 50, this.yCentre + 38, this.xCentre + 50, this.yCentre + 8);
-    }
-    var upDown: number = 1;
-    var leftRight1: number = 1;
-    var leftRight2: number = 1;
+  private DrawGenerations() {
     for (let i = 0; i < 2; i++) {
-      currentPerson = this.generation1[i];
-      mother = this.family.find(person => person.personID == currentPerson.motherID)
-      if (mother) {
-      this.generation2.push(mother)
-      this.PersonDisplay(mother,this.xCentre - 100, this.yCentre - 100 * upDown);
-      this.Connect(this.xCentre + 50, this.yCentre - upDown * 65 - i * 10, this.xCentre - 50, this.yCentre - upDown * 95 - i * 10, upDown);
-      }
-      father = this.family.find(person => person.personID == currentPerson.fatherID)
-      if (father) {
-      this.generation2.push(father)
-      this.PersonDisplay(father, this.xCentre + 100, this.yCentre - 100 * upDown);
-      this.Connect(this.xCentre + 50, this.yCentre - upDown * 65 - i * 10, this.xCentre + 150, this.yCentre - upDown * 95 - i * 10, upDown);
-      }
-      for (let j = 0; j < 2; j++) {
-        currentPerson = this.generation2[j];
-        if (currentPerson) {
-          mother = this.family.find(person => person.personID == currentPerson.motherID)
-          if (mother) {
-            this.generation3.push(mother)
-            this.PersonDisplay(mother, this.xCentre - leftRight1 * 300 - 100, this.yCentre - 150 * upDown);
-            this.Connect(this.xCentre + 50 - leftRight1 * 100, this.yCentre - upDown * 115 - i * 10, this.xCentre + 50 - leftRight1 * 400, this.yCentre - upDown * 145 - i * 10, upDown);
-          }
-          father = this.family.find(person => person.personID == currentPerson.fatherID)
-          if (father) {
-            this.generation3.push(father)
-            this.PersonDisplay(father,this.xCentre - leftRight1 * 300 +  100, this.yCentre - 150 * upDown);
-            this.Connect(this.xCentre + 50 - leftRight1 * 100, this.yCentre - upDown * 115 - i * 10, this.xCentre + 50 - leftRight1 * 200, this.yCentre - upDown * 145 - i * 10, upDown);
-          }
+      let startPerson = this.family.find(person => person.personID == this.startPersonID)
+      for (let j = 2; j < 5; j += 2) {
+        this.xPosn = this.drawWidth * j /6;
+        this.yPosn = this.drawHeight/2 + this.upDown * this.ySeparation;
+        if (j == 2) {
+          this.currentPerson = this.family.find(person => person.personID == startPerson.motherID);
         }
-        for (let k = 0; k < 2; k++) {
-          this.generation4= [];
-          currentPerson = this.generation3[k];
-          if (currentPerson) {
-            mother = this.family.find(person => person.personID == currentPerson.motherID)
-            if (mother) {
-              this.generation4.push(mother)
-              this.PersonDisplay(mother,this.xCentre - leftRight1 * 350 - leftRight2 * 150 - 80, this.yCentre - 200 * upDown);
-              this.Connect(this.xCentre + 50 - leftRight1 * (k + 1) * 200, this.yCentre - upDown * 165 - i * 10,
-                                  this.xCentre - leftRight1 * 350 + leftRight1 * leftRight2 * 150 - 30, this.yCentre - upDown * 195 - i * 10, upDown);
+        else {
+          this.currentPerson = this.family.find(person => person.personID == startPerson.fatherID);
+        }
+        this.PersonDisplay(this.currentPerson,this.xPosn,this.yPosn);
+        if (i == 0 ) {
+          this.Connect2(this.drawWidth/2, this.drawHeight/2 + 4, this.xPosn, this.yPosn, this.upDown)
+        }
+        else {
+          this.Connect(this.drawWidth/2, this.drawHeight/2 + 4, this.xPosn, this.yPosn, this.upDown)
+        }
+        this.prevxPosn2 = this.xPosn;
+        this.prevyPosn2 = this.yPosn;
+        this.previousPerson2 = this.currentPerson;
+        for (let k = this.count2; k < this.count2 + 3; k += 2) {
+          this.xPosn = this.drawWidth * k /12;
+          this.yPosn = this.drawHeight/2 + this.upDown * 2 * this.ySeparation;
+          if (this.previousPerson2) {
+            if (k == this.count2) {
+              this.currentPerson = this.family.find(person => person.personID == this.previousPerson2.motherID);
             }
-            father = this.family.find(person => person.personID == currentPerson.fatherID)
-            if (father) {
-              this.generation4.push(father)
-              this.PersonDisplay(father,this.xCentre - leftRight1 * 350 - leftRight2 * 150 +  80, this.yCentre - 200 * upDown);
-              this.Connect(this.xCentre + 50 - leftRight1 * (k + 1) * 200, this.yCentre - upDown * 165 - i * 10,
-                                this.xCentre - leftRight1 * 350 + leftRight1 * leftRight2 * 150 + 130, this.yCentre - upDown * 195 - i * 10, upDown);
-
+            else {
+              this.currentPerson = this.family.find(person => person.personID == this.previousPerson2.fatherID);
             }
           }
-          leftRight2 = -1;
+          if (this.currentPerson) {
+            this.PersonDisplay(this.currentPerson,this.xPosn,this.yPosn);
+            this.Connect(this.prevxPosn2, this.prevyPosn2 + this.upDown * 15, this.xPosn, this.yPosn, this.upDown)
+          }
+          this.prevxPosn3 = this.xPosn;
+          this.prevyPosn3 = this.yPosn;
+          this.previousPerson3 = this.currentPerson;
+          for (let m = this.count3; m < this.count3 + 3; m += 2) {
+            this.xPosn = this.drawWidth * m /24;
+            this.yPosn = this.drawHeight/2 + this.upDown * 3 * this.ySeparation;
+            if (this.previousPerson3) {
+              if (m == this.count3) {
+                this.currentPerson = this.family.find(person => person.personID == this.previousPerson3.motherID);
+              }
+              else {
+                this.currentPerson = this.family.find(person => person.personID == this.previousPerson3.fatherID);
+              }
+            }
+            if (this.currentPerson) {
+              this.PersonDisplay(this.currentPerson,this.xPosn,this.yPosn);
+              this.Connect(this.prevxPosn3, this.prevyPosn3 + this.upDown * 15, this.xPosn, this.yPosn, this.upDown)
+            }
+            this.prevxPosn4 = this.xPosn;
+            this.prevyPosn4 = this.yPosn;
+            this.previousPerson4 = this.currentPerson;
+            for (let p = this.count4; p < this.count4 + 3; p += 2) {
+              this.xPosn = this.drawWidth * p /48;
+              this.yPosn = this.drawHeight/2 + this.upDown * 4 * this.ySeparation;
+              if (this.previousPerson4) {
+                if (p == this.count4) {
+                  this.currentPerson = this.family.find(person => person.personID == this.previousPerson4.motherID);
+                }
+                else {
+                  this.currentPerson = this.family.find(person => person.personID == this.previousPerson4.fatherID);
+                }
+              }
+              if (this.currentPerson) {
+                this.PersonDisplay(this.currentPerson,this.xPosn,this.yPosn);
+                this.Connect(this.prevxPosn4, this.prevyPosn4 + this.upDown * 15, this.xPosn, this.yPosn, this.upDown)
+              }
+            }
+            this.count4 += 4;
+          }
+          this.count3 += 4;
         }
-        this.generation3 = [];
-        leftRight1 = -1;
-        leftRight2 = 1;
+        this.count2 += 4;
       }
-      this.generation2 = [];
-      leftRight1 = 1;
-      upDown = -1;
+      this.upDown = 1;
+      this.count2 = 3;
+      this.count3 = 5;
+      this.count4 = 9;
+      this.startPersonID = "JefferyEdwinWoodhams1950";
     }
   }
   private AddRoutingClick(xValue: number, yValue: number, routingService: RoutingService, personID: string) {
     var drawCanvas = this.ctx.canvas, elements = [];
     elements.push({
-      width: 200,
+      width: 100,
       height: 50,
-      top: yValue - 30,
-      left: xValue,
+      top: yValue - 15,
+      left: xValue -50,
       person: personID
     });
     drawCanvas.addEventListener('click', function (event) {
@@ -136,31 +157,35 @@ navigationSubscription: any;
         }
       }
     }, false);
-    drawCanvas.addEventListener('contextmenu', function (event) {
-      var xVal = event.pageX, yVal = event.pageY;
-      for (let ele of elements){
-        if (yVal > ele.top && yVal < ele.top + ele.height && xVal > ele.left && xVal < ele.left + ele.width) {
-          routingService.openRight(ele.person);
-          break
-        }
-      }
-    }, false);
   }
-  private StraightConnect(x1: number, y1: number, x2: number, y2: number) {
-    this.ctx.moveTo(x1, y1);
-    this.ctx.lineTo(x2, y2);
+  private Connect2(x1: number, y1: number, x2: number, y2: number, upDown: number) {
+    this.ctx.moveTo(x1, y1 + 8);
+    this.ctx.lineTo(x1, y1 - this.line);
+    this.ctx.lineTo(x2, y1 - this.line);
+    this.ctx.lineTo(x2, y2 + this.line + 8);
     this.ctx.stroke();
   }
   private Connect(x1: number, y1: number, x2: number, y2: number, upDown: number) {
-    this.ctx.moveTo(x1, y1);
-    this.ctx.lineTo(x1, y1 - upDown * 15);
-    this.ctx.lineTo(x2, y1 - upDown * 15);
-    this.ctx.lineTo(x2, y2);
+    this.ctx.strokeStyle = "Plum"
+    if (upDown == 1) {
+      this.ctx.moveTo(x1, y1 + 8);
+      this.ctx.lineTo(x1, y1 + this.line);
+      this.ctx.lineTo(x2, y1 + this.line);
+      this.ctx.lineTo(x2, y2 - this.line);
+    }
+    else {
+      this.ctx.moveTo(x1, y1);
+      this.ctx.lineTo(x1, y1 - this.line);
+      this.ctx.lineTo(x2, y1 - this.line);
+      this.ctx.lineTo(x2, y2 + this.line + 4);
+    }
     this.ctx.stroke();
   }
 
   private PersonDisplay(person: Person, xPosition: number, yPosition: number, ) {
-    this.ctx.fillText(person.name.split(' ',1) + " " + person.surname, xPosition, yPosition);
+    this.ctx.fillStyle = "DarkBlue";
+    this.ctx.fillText(person.name.split(' ',1) +"", xPosition, yPosition);
+    this.ctx.fillText(person.surname, xPosition, yPosition + this.line);
     this.AddRoutingClick(xPosition, yPosition, this.routingService, person.personID)
   }
 }
