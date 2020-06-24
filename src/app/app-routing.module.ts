@@ -28,7 +28,7 @@ const routes: Routes = [
       data: FamilyChartResolver
     },
     runGuardsAndResolvers: "paramsChange"
-  },
+  }/* ,
   {
     path: 'family-circle/:personID',
     component: FamilyCircleComponent,
@@ -36,7 +36,7 @@ const routes: Routes = [
       data: FamilyChartResolver
     },
     runGuardsAndResolvers: "paramsChange"
-  }
+  } */
 ];
 
 @NgModule({

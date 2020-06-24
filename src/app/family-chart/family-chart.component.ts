@@ -77,6 +77,10 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
 
       this.ctx = this.canvas.nativeElement.getContext('2d');
       this.ctx.clearRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
+      this.ctx.fillStyle = "Linen";
+      this.ctx.fillRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
+      this.ctx.fillStyle = "DarkBlue";
+      this.ctx.strokeStyle = "Plum";
       this.ctx.font = "15px Arial";
       this.Parents();
       this.KeyPeople();
@@ -146,7 +150,7 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
       var person = this.family.find(person => person.personID == this.ids[i + 1]);
       if (person){
         this.ParentLinesDraw(startYValue, i);
-        if (this.keySpouse && (person.spouseID == this.keyPerson.motherID || person.spouseID == this.keySpouse.motherID)) {
+        if ( person.spouseID == this.keyPerson.motherID || (this.keySpouse && person.spouseID == this.keySpouse.motherID)) {
           var marriage = person.events.find(event => event.description == "Marriage")
         }
         else{
@@ -278,9 +282,10 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
           if ( this.eventTypes.includes(event.description)){
             if (event.description == "Marriage") {
               this.yValues[this.childIndex] += 2 * this.line;
-              if (spouse) this.PersonDisplay(spouse, this.childIndex, this.childWidth/2, "top");
-              this.AddRoutingClick(this.xValues[this.childIndex] - this.childWidth/2, this.yValues[this.childIndex], this.routingService, spouse.personID)
-              this.yValues[this.childIndex] += this.line;
+              if (spouse) {
+                this.PersonDisplay(spouse, this.childIndex, this.childWidth/2, "top");
+                this.AddRoutingClick(this.xValues[this.childIndex] - this.childWidth/2, this.yValues[this.childIndex], this.routingService, spouse.personID)
+                this.yValues[this.childIndex] += this.line;}
             }
             if (event.description == "Marriage2") {
               this.yValues[this.childIndex] += 2 * this.line;
@@ -389,8 +394,8 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
     var events = this.keyPerson.events.filter(event => new Date(event.date) > new Date(this.keyMarriage.date));
     var children: Person[] = this.children1;
     for (let i = 0; i <= 1; i++) {
-      if (children.length > 0 && children[0].events.find(event => event.description == "Birth")) {
-        var birthDate: Date = children[0].events.find(event => event.description == "Birth").date;
+      if (children.length > 0 && children[0].events.find(event => event.description == "Birth" || event.description == "Christening")) {
+        var birthDate: Date = children[0].events.find(event => event.description == "Birth" || event.description == "Christening").date;
         var childStart = new Event();
         childStart.description = "ChildStart";
         childStart.date = birthDate;

@@ -174,7 +174,12 @@ export class AddEventComponent implements OnInit {
       data.description = values.type;
     }
     data.personID = this.personID;
-    data.single = values.single;
+    if (values.type == "Death" || values.type == "Funeral") {
+      data.single = true;
+    }
+    else {
+      data.single = values.single;
+    }
     data.date = new Date(values.date);
     if (this.isCreate) {
       if (data.description == "Marriage2") {
