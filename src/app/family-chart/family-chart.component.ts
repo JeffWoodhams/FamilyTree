@@ -271,8 +271,8 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
         this.AddRoutingClick(this.xValues[this.childIndex] - this.childWidth/2, this.yValues[this.childIndex], this.routingService, child.personID)
         this.yValues[this.childIndex] += 0.5 * this.line;
         this.ChildLineSeparator();
-        var {spouse, spouse2, childEvents } = this.SpouseEvents(child);
-        childEvents.sort(this.EventDateSort).forEach(event =>{
+        var {spouse, spouse2} = this.SpouseEvents(child);
+        child.events.sort(this.EventDateSort).forEach(event =>{
           if ( this.eventTypes.includes(event.description)){
             if (event.description == "Marriage") {
               this.yValues[this.childIndex] += 2 * this.line;
@@ -297,7 +297,7 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
           else {
             this.EventDisplay(event, this.childIndex, this.childWidth, "top", true);
           }
-          if (childEvents.indexOf(event) != childEvents.length - 1) this.ChildLineSeparator();
+          if (child.events.indexOf(event) != child.events.length - 1) this.ChildLineSeparator();
         });
         this.childIndex++;
       });
@@ -397,8 +397,8 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
       }
       children = this.children2;
     }
-    if (this.keyPerson.events.find(event => event.description == "Death")) {
-      let keyDeathDate = new Date(this.keyPerson.events.find(event => event.description == "Death").date)
+    if (this.keyPerson.events.find(event => event.description == "Death" || event.description == "Funeral")) {
+      let keyDeathDate = new Date(this.keyPerson.events.find(event => event.description == "Death" || event.description == "Funeral").date)
       if (this.keySpouse) {
         events.push.apply(events, this.keySpouse.events.filter(event => new Date(event.date) > keyDeathDate && (event.single == true || event.description == "Marriage2")));
         events.push.apply(events, this.keySpouse.events.filter(event => event.single == true && new Date(event.date) < keyDeathDate));
@@ -408,29 +408,28 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
       }
     }
     if (this.keySpouse2) {
-      let spouseDeathDate = new Date(this.keySpouse.events.find(event => event.description == "Death").date)
+      let spouseDeathDate = new Date(this.keySpouse.events.find(event => event.description == "Death" || event.description == "Funeral").date)
       events.push.apply(events, this.keySpouse2.events.filter(event => new Date(event.date) > spouseDeathDate && event.single == true));
     }
     events.sort(this.EventDateSort);
     return events;
   }
   private SpouseEvents(child: Person) {
-    var childEvents: Event[] = child.events.slice();
     var spouse = this.family.find(person => person.personID == child.spouseID);
     if (spouse) {
       if (!child.events.find(event => event.description == "Marriage")) {
         var marriage = spouse.events.find(event => event.description == "Marriage");
-        if (marriage) childEvents.push(marriage);
+        if (marriage) child.events.push(marriage);
       }
-      var spouseDeath = spouse.events.find(event => event.description == "Death");
-      if (spouseDeath) childEvents.push(spouseDeath); 
+      var spouseDeath = spouse.events.find(event => event.description == "Death" || event.description == "Funeral");
+      if (spouseDeath) child.events.push(spouseDeath); 
     }
     var spouse2 = this.family.find(person => person.personID == child.spouse2ID);
     if (spouse2) {
-      var spouse2Death = spouse2.events.find(event => event.description == "Death");
-      if (spouse2Death) childEvents.push(spouse2Death);
+    var spouse2Death = spouse2.events.find(event => event.description == "Death" || event.description == "Funeral");
+    if (spouse2Death) child.events.push(spouse2Death);
     }
-    return { spouse, spouse2, childEvents };
+    return { spouse, spouse2 };
   }
 //#endregion
 
