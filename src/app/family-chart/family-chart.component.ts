@@ -306,8 +306,8 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
   private EventDisplay(event: Event, personIndex: number, xOffset: number, imagePosition: string, child?: boolean) {
     var textWidth;
     ({ textWidth, xOffset } = this.EventSetup(event, personIndex, xOffset, child));
-    var { prefix, suffix } = this.EventStringPreparation(event);
-    let eventString = `${ event.dateString}: ${event.description}${event.occupation} ${prefix}${event.location}${suffix}${event.place}`
+    var { prefix, suffix, description } = this.EventStringPreparation(event);
+    let eventString = `${ event.dateString}: ${description}${event.occupation} ${prefix}${event.location}${suffix}${event.place}`
     var noLines = this.WrapString(eventString, textWidth, this.xValues[personIndex] - xOffset, this.yValues[personIndex]);
     this.yValues[personIndex] += this.line;
     if (event.images){
@@ -331,19 +331,20 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
   private EventStringPreparation(event: Event) {
     var prefix = "";
     var suffix = " in ";
+    var description = event.description;
     if (event.location == "") {
       suffix = "";
     }
     if (event.description == "Census") {
       event.dateString = new Date(event.date).getFullYear() + " Census";
-      event.description = "";
+      description = "";
       if (event.occupation == null) event.occupation = "";
       prefix = "living at ";
       if (event.location == "") {
         prefix = "living in ";
       }
     }
-    return { prefix, suffix };
+    return { prefix, suffix, description };
   }
   private ImagesDisplay(images: any[], personIndex: number, xOffset: number, imagePosition: string) {
     for (let j = 0; j < images.length; j++) {
