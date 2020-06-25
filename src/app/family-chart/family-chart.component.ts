@@ -404,8 +404,8 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
       }
       children = this.children2;
     }
-    if (this.keyPerson.events.find(event => event.description == "Death")) {
-      let keyDeathDate = new Date(this.keyPerson.events.find(event => event.description == "Death").date)
+    if (this.keyPerson.events.find(event => event.description == "Death" || event.description == "Funeral")) {
+      let keyDeathDate = new Date(this.keyPerson.events.find(event => event.description == "Death" || event.description == "Funeral").date)
       if (this.keySpouse) {
         events.push.apply(events, this.keySpouse.events.filter(event => new Date(event.date) > keyDeathDate && (event.single == true || event.description == "Marriage2")));
         events.push.apply(events, this.keySpouse.events.filter(event => event.single == true && new Date(event.date) < keyDeathDate));
@@ -415,7 +415,7 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
       }
     }
     if (this.keySpouse2) {
-      let spouseDeathDate = new Date(this.keySpouse.events.find(event => event.description == "Death").date)
+      let spouseDeathDate = new Date(this.keySpouse.events.find(event => event.description == "Death" || event.description == "Funeral").date)
       events.push.apply(events, this.keySpouse2.events.filter(event => new Date(event.date) > spouseDeathDate && event.single == true));
     }
     events.sort(this.EventDateSort);
@@ -428,12 +428,12 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
         var marriage = spouse.events.find(event => event.description == "Marriage");
         if (marriage) child.events.push(marriage);
       }
-      var spouseDeath = spouse.events.find(event => event.description == "Death");
+      var spouseDeath = spouse.events.find(event => event.description == "Death" || event.description == "Funeral");
       if (spouseDeath) child.events.push(spouseDeath); 
     }
     var spouse2 = this.family.find(person => person.personID == child.spouse2ID);
     if (spouse2) {
-    var spouse2Death = spouse2.events.find(event => event.description == "Death");
+    var spouse2Death = spouse2.events.find(event => event.description == "Death" || event.description == "Funeral");
     if (spouse2Death) child.events.push(spouse2Death);
     }
     return { spouse, spouse2 };
