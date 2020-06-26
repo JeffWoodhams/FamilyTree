@@ -75,13 +75,7 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
          }
       })
 
-      this.ctx = this.canvas.nativeElement.getContext('2d');
-      this.ctx.clearRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
-      this.ctx.fillStyle = "Linen";
-      this.ctx.fillRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
-      this.ctx.fillStyle = "DarkBlue";
-      this.ctx.strokeStyle = "Plum";
-      this.ctx.font = "15px Arial";
+      this.CanvasSetup();
       this.Parents();
       this.KeyPeople();
       this.KeySingleData();
@@ -313,8 +307,8 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
   private EventDisplay(event: Event, personIndex: number, xOffset: number, imagePosition: string, child?: boolean) {
     var textWidth;
     ({ textWidth, xOffset } = this.EventSetup(event, personIndex, xOffset, child));
-    var { prefix, suffix } = this.EventStringPreparation(event);
-    let eventString = `${ event.dateString}: ${event.description}${event.occupation} ${prefix}${event.location}${suffix}${event.place}`
+    var { prefix, suffix, description } = this.EventStringPreparation(event);
+    let eventString = `${ event.dateString}: ${description}${event.occupation} ${prefix}${event.location}${suffix}${event.place}`
     var noLines = this.WrapString(eventString, textWidth, this.xValues[personIndex] - xOffset, this.yValues[personIndex]);
     this.yValues[personIndex] += this.line;
     if (event.images){
@@ -338,19 +332,20 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
   private EventStringPreparation(event: Event) {
     var prefix = "";
     var suffix = " in ";
+    var description = event.description;
     if (event.location == "") {
       suffix = "";
     }
     if (event.description == "Census") {
       event.dateString = new Date(event.date).getFullYear() + " Census";
-      event.description = "";
+      description = "";
       if (event.occupation == null) event.occupation = "";
       prefix = "living at ";
       if (event.location == "") {
         prefix = "living in ";
       }
     }
-    return { prefix, suffix };
+    return { prefix, suffix, description};
   }
   private ImagesDisplay(images: any[], personIndex: number, xOffset: number, imagePosition: string) {
     for (let j = 0; j < images.length; j++) {
@@ -498,6 +493,28 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
         }
       }
     }, false);
+  }
+  private CanvasSetup() {
+    this.ctx = this.canvas.nativeElement.getContext('2d');
+    this.ctx.clearRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
+    this.ctx.fillStyle = "Linen";
+    this.ctx.fillRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
+    this.ctx.font = "13px Arial";
+    this.ctx.fillStyle = "Purple";
+    this.ctx.strokeStyle = "Purple";
+    this.ctx.fillText("Clicking on a person's name will", 20, 100);
+    this.ctx.fillText("re-focus the chart on that person", 20, 115);
+    this.ctx.fillText("Clicking on an icon will", 20, 135);
+    this.ctx.fillText("display the image for that event", 20, 150);
+    this.ctx.moveTo(12, 83);
+    this.ctx.lineTo(217, 83);
+    this.ctx.lineTo(217, 160);
+    this.ctx.lineTo(12, 160);
+    this.ctx.lineTo(12, 83);
+    this.ctx.stroke();
+    this.ctx.font = "15px Arial";
+    this.ctx.fillStyle = "DarkBlue";
+    this.ctx.strokeStyle = "Plum";
   }
   private ChildConnect() {
     this.ctx.beginPath();
