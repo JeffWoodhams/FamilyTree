@@ -69,13 +69,7 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
         this.keyMarriage = this.keyPerson.events.find(event => event.description == "Marriage");
         if (!this.keyMarriage && this.keySpouse) this.keyMarriage = this.keySpouse.events.find(event => event.description == "Marriage");
       }
-      this.ctx = this.canvas.nativeElement.getContext('2d');
-      this.ctx.clearRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
-      this.ctx.fillStyle = "Linen";
-      this.ctx.fillRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
-      this.ctx.fillStyle = "DarkBlue";
-      this.ctx.strokeStyle = "Plum";
-      this.ctx.font = "15px Arial";
+      this.CanvasSetup();
       this.Parents();
       this.KeyPeople();
       this.KeySingleData();
@@ -483,6 +477,28 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
         }
       }
     }, false);
+  }
+  private CanvasSetup() {
+    this.ctx = this.canvas.nativeElement.getContext('2d');
+    this.ctx.clearRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
+    this.ctx.fillStyle = "Linen";
+    this.ctx.fillRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
+    this.ctx.font = "13px Arial";
+    this.ctx.fillStyle = "Purple";
+    this.ctx.strokeStyle = "Purple";
+    this.ctx.fillText("Clicking on a person's name will", 20, 100);
+    this.ctx.fillText("re-focus the chart on that person", 20, 115);
+    this.ctx.fillText("Clicking on an icon will", 20, 135);
+    this.ctx.fillText("display the image for that event", 20, 150);
+    this.ctx.moveTo(12, 83);
+    this.ctx.lineTo(217, 83);
+    this.ctx.lineTo(217, 160);
+    this.ctx.lineTo(12, 160);
+    this.ctx.lineTo(12, 83);
+    this.ctx.stroke();
+    this.ctx.font = "15px Arial";
+    this.ctx.fillStyle = "DarkBlue";
+    this.ctx.strokeStyle = "Plum";
   }
   private ChildConnect() {
     this.ctx.beginPath();
