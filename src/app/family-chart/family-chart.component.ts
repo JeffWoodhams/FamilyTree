@@ -18,6 +18,8 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
 
   constructor(private route: ActivatedRoute,private modalService: ModalService, private routingService: RoutingService, private router: Router){
     this.navigationSubscription = this.router.events.subscribe((e: any) => {
+      this.ctx = this.canvas.nativeElement.getContext('2d');
+      this.ctx.clearRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
       if (e instanceof NavigationEnd) {
         this.route.paramMap.subscribe(route => {
           this.keyID = route.get('personID')
@@ -265,8 +267,8 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
         this.AddRoutingClick(this.xValues[this.childIndex] - this.childWidth/2, this.yValues[this.childIndex], this.routingService, child.personID)
         this.yValues[this.childIndex] += 0.5 * this.line;
         this.ChildLineSeparator();
-        var {spouse, spouse2} = this.SpouseEvents(child);
-        child.events.sort(this.EventDateSort).forEach(event =>{
+        var {spouse, spouse2, childEvents} = this.SpouseEvents(child);
+        childEvents.sort(this.EventDateSort).forEach(event =>{
           if ( this.eventTypes.includes(event.description)){
             if (event.description == "Marriage") {
               this.yValues[this.childIndex] += 2 * this.line;
@@ -410,6 +412,7 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
     return events;
   }
   private SpouseEvents(child: Person) {
+    var childEvents = child.events.slice();
     var spouse = this.family.find(person => person.personID == child.spouseID);
     if (spouse) {
       if (!child.events.find(event => event.description == "Marriage")) {
@@ -417,14 +420,14 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
         if (marriage) child.events.push(marriage);
       }
       var spouseDeath = spouse.events.find(event => event.description == "Death" || event.description == "Funeral");
-      if (spouseDeath) child.events.push(spouseDeath); 
+      if (spouseDeath) childEvents.push(spouseDeath); 
     }
     var spouse2 = this.family.find(person => person.personID == child.spouse2ID);
     if (spouse2) {
     var spouse2Death = spouse2.events.find(event => event.description == "Death" || event.description == "Funeral");
-    if (spouse2Death) child.events.push(spouse2Death);
+    if (spouse2Death) childEvents.push(spouse2Death);
     }
-    return { spouse, spouse2 };
+    return { spouse, spouse2, childEvents};
   }
 //#endregion
 
@@ -479,8 +482,6 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
     }, false);
   }
   private CanvasSetup() {
-    this.ctx = this.canvas.nativeElement.getContext('2d');
-    this.ctx.clearRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
     this.ctx.fillStyle = "Linen";
     this.ctx.fillRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
     this.ctx.font = "13px Arial";

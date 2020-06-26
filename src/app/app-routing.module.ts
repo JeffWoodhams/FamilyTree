@@ -12,7 +12,8 @@ const routes: Routes = [
   },
   {
     path: 'family-chart/:personID',
-    component: FamilyChartComponent
+    component: FamilyChartComponent,
+    runGuardsAndResolvers: "paramsChange"
   }
 ];
 
