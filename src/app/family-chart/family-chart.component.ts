@@ -174,7 +174,7 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
       for (let i = 0; i <= 1; i++){
         events[i].forEach(event =>{
           if ( this.eventTypes.includes(event.description)){
-            this.MainEventsDisplay(this.eventTypes.indexOf(event.description), event, this.parentWidth, i, "left", "")
+            this.MainEventsDisplay(this.eventTypes.indexOf(event.description), event, this.parentWidth, i, "left", "", false, event.single)
           }
           else {
             this.EventDisplay(event, i, this.parentWidth, "left");
