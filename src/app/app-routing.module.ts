@@ -11,6 +11,11 @@ const routes: Routes = [
     component: FamilyCircleComponent
   },
   {
+    path: 'family-circle/:personID',
+    component: FamilyCircleComponent,
+    runGuardsAndResolvers: "paramsChange"
+  },
+  {
     path: 'family-chart/:personID',
     component: FamilyChartComponent,
     runGuardsAndResolvers: "paramsChange"

@@ -475,7 +475,7 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
       var xVal = event.pageX, yVal = event.pageY;
       for (let ele of elements){
         if (yVal > ele.top && yVal < ele.top + ele.height && xVal > ele.left && xVal < ele.left + ele.width) {
-          routingService.open(ele.person);
+          routingService.openChart(ele.person);
           break
         }
       }

@@ -10,5 +10,9 @@ export class RoutingService {
     open(personID: string) {
         this.router.navigate(['family-chart/',personID]);
     }
+    openChart(personID: string) {
+        this.router.navigate(['family-circle/',personID]);
+    }
+
 
 }

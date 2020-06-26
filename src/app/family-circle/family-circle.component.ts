@@ -47,6 +47,11 @@ private count2: number = 3;private count3: number = 5;private count4: number = 9
     });
   }
   ngOnInit(): void {
+    this.route.paramMap.subscribe(route => {
+      if (route.get('personID') != null) {
+        this.router.navigate(['family-chart/',route.get('personID')]);
+      }
+    });
   }
   private DrawGenerations() {
     for (let i = 0; i < 2; i++) {
