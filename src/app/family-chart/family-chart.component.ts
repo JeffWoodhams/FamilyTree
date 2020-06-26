@@ -120,8 +120,7 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
         for (let j = 0; j < 4; j++){
           var event = person.events.find(event => event.description == this.eventTypes[j]);
           if (event){
-            event.single = false;
-            this.MainEventsDisplay(j, event, this.parentWidth, i, "left", "");
+            this.MainEventsDisplay(j, event, this.parentWidth, i, "left", "", false, false);
             if (j == 0) j++;
           }
         }
@@ -147,7 +146,7 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
           marriage = person.events.find(event => event.description == "Marriage2")
         }
         if (marriage) {
-          this.MainEventsDisplay(4, marriage, this.parentWidth, i/2 -1, "left", "")
+          this.MainEventsDisplay(4, marriage, this.parentWidth, i/2 -1, "left", "", false, false)
         }
         this.LineSeparator( i/2 - 1, false)
       }
@@ -187,7 +186,7 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
     else {
       this.keyPerson.events.sort(this.EventDateSort).forEach(event =>{
         if ( this.eventTypes.includes(event.description)){
-          this.MainEventsDisplay(this.eventTypes.indexOf(event.description), event, this.parentWidth, 0, "left", "")
+          this.MainEventsDisplay(this.eventTypes.indexOf(event.description), event, this.parentWidth, 0, "left", "", false, event.single)
         }
         else {
           this.EventDisplay(event, 0, this.parentWidth, "left");
@@ -198,7 +197,7 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
   }
   private KeyPeopleMarriage() {  
     this.KeyPeopleConnect();
-    this.MainEventsDisplay(4, this.keyMarriage, this.parentWidth, 0, "top", "");
+    this.MainEventsDisplay(4, this.keyMarriage, this.parentWidth, 0, "top", "", false, false);
     this.KeyPeopleBalance();
     this.LineSeparators(this.indexComplete);
   } 
@@ -223,17 +222,17 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
             this.AddRoutingClick(this.xValues[0] - this.parentWidth, this.yValues[0], this.routingService, this.keyPerson2.personID)
             this.yValues[0] += this.line;
           }
-          this.MainEventsDisplay(this.eventTypes.indexOf(event.description), event, this.parentWidth, 0, "top", "")
+          this.MainEventsDisplay(this.eventTypes.indexOf(event.description), event, this.parentWidth, 0, "top", "", false, event.single)
           this.indexComplete[1] = false;
           spouseIndex = 1;
         }
         else if (this.keySpouse && event.personID == this.keySpouse.personID || (this.keySpouse2 && event.personID == this.keySpouse2.personID)) {
           this.yValues[1] += this.line;
-          this.MainEventsDisplay(this.eventTypes.indexOf(event.description), event, 0, 1, "top", "")
+          this.MainEventsDisplay(this.eventTypes.indexOf(event.description), event, 0, 1, "top", "", false, event.single)
         }
         else  {
           this.yValues[0] += this.line;
-          this.MainEventsDisplay(this.eventTypes.indexOf(event.description), event, this.parentWidth, 0, "top", "")
+          this.MainEventsDisplay(this.eventTypes.indexOf(event.description), event, this.parentWidth, 0, "top", "", false, event.single)
           spouseIndex = 1;
         }
       }
@@ -288,7 +287,7 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
               else if (spouse2 && event.personID == spouse2.personID) eventData = spouse2.name;
               eventData += " died " + event.dateString;
             }
-            this.MainEventsDisplay(this.eventTypes.indexOf(event.description), event, this.childWidth, this.childIndex, "top", eventData, true)
+            this.MainEventsDisplay(this.eventTypes.indexOf(event.description), event, this.childWidth, this.childIndex, "top", eventData, true, event.single)
           }
           else {
             this.EventDisplay(event, this.childIndex, this.childWidth, "top", true);
@@ -301,7 +300,7 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
 //#region Display Functions
   private EventDisplay(event: Event, personIndex: number, xOffset: number, imagePosition: string, child?: boolean) {
     var textWidth;
-    ({ textWidth, xOffset } = this.EventSetup(event, personIndex, xOffset, child));
+    ({ textWidth, xOffset } = this.EventSetup(event, personIndex, xOffset, child, event.single));
     var { prefix, suffix, description } = this.EventStringPreparation(event);
     let eventString = `${ event.dateString}: ${description}${event.occupation} ${prefix}${event.location}${suffix}${event.place}`
     var noLines = this.WrapString(eventString, textWidth, this.xValues[personIndex] - xOffset, this.yValues[personIndex]);
@@ -311,8 +310,8 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
     }
     this.yValues[personIndex] += (noLines - 0.5) * this.line;
   }
-  private EventSetup(event: Event, personIndex: number, xOffset: number, child: boolean) {
-    if (event.single == true && !child) {
+  private EventSetup(event: Event, personIndex: number, xOffset: number, child: boolean, single: boolean) {
+    if (single == true && !child) {
       var textWidth = 25;
       if (personIndex == 1) xOffset = 0;
     }
@@ -355,9 +354,9 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
       this.AddImageLink(personIndex, xPosition, yPosition, images[j].image, images[j].type);
     }
   }
-  private MainEventsDisplay( j: number, event: Event, xOffset: number, personIndex: number, imagePosition: string, eventData: string, child?: boolean) {
+  private MainEventsDisplay( j: number, event: Event, xOffset: number, personIndex: number, imagePosition: string, eventData: string, child: boolean, single: boolean) {
     var textWidth;
-    ({ textWidth, xOffset } = this.EventSetup(event, personIndex, xOffset, child));
+    ({ textWidth, xOffset } = this.EventSetup(event, personIndex, xOffset, child, single));
     if (eventData == "") eventData = this.prefixes[j] + ": " + event.dateString;
     if (event.location) {
       eventData += " at " + event.location;
