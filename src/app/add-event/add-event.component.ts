@@ -34,7 +34,7 @@ export class AddEventComponent implements OnInit {
   images:any[];
   people: Person[];
   isCreate: boolean;
-  types: string[] = ["Census","Birth","Christening","Marriage","Death","Funeral","Marriage2", ""];
+  types: string[] = ["Census","Birth","Christening","Marriage","Death","Funeral","Marriage2","Marriage3", ""];
   imageTypes: string[] = ["Census","Birth","Death","Map","Marriage", "Photo","Document","Newspaper","Memory",""];
   filteredModals1: Observable<string[]>;
   filteredModals2: Observable<string[]>;
@@ -184,6 +184,9 @@ export class AddEventComponent implements OnInit {
     if (this.isCreate) {
       if (data.description == "Marriage2") {
         data.eventID = this.personID + "M2";
+      }
+      if (data.description == "Marriage3") {
+        data.eventID = this.personID + "M3";
       }
       else if (this.types.includes(data.description) && data.description != "Census") {
           data.eventID = this.personID + data.description.substring(0,1);

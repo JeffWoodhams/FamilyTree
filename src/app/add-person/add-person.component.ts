@@ -21,6 +21,7 @@ export class AddPersonComponent implements OnInit {
   mother:string;
   spouse:string;
   spouse2:string;
+  spouse3:string;
   personID:string;
   birthYear:number;
   personalImage: string;
@@ -45,6 +46,7 @@ export class AddPersonComponent implements OnInit {
       this.mother= currentPerson.motherID;
       this.spouse = currentPerson.spouseID;
       this.spouse2 = currentPerson.spouse2ID;
+      this.spouse3 = currentPerson.spouse3ID;
       this.personID = currentPerson.personID;
       this.events = data.events;
       if (currentPerson.personalImage) this.personalImage = currentPerson.personalImage[0].image;
@@ -65,6 +67,7 @@ export class AddPersonComponent implements OnInit {
       mother:this.mother,
       spouse:this.spouse,
       spouse2:this.spouse2,
+      spouse3:this.spouse3,
       birthYear:this.birthYear,
       personEvent:this.personEvent,
       personalImage:this.personalImage
@@ -105,6 +108,7 @@ export class AddPersonComponent implements OnInit {
     data.motherID= values.mother;
     data.spouseID= values.spouse;
     data.spouse2ID= values.spouse2;
+    data.spouse3ID= values.spouse3;
     data.birthYear= values.birthYear;
     data.personID = data.name.replace(/\s/g, "") + data.surname;
     if (data.birthYear){

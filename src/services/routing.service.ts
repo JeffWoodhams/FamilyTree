@@ -8,7 +8,7 @@ export class RoutingService {
 
 
     open(personID: string) {
-        this.router.navigate(['family-chart/',personID]);
+        this.router.navigate(['family-circle/',personID]);
     }
     openRight(personID: string) {
         this.router.navigate(['people-list/',personID]);

@@ -17,9 +17,9 @@ canvas: ElementRef<HTMLCanvasElement>;
 private ctx: CanvasRenderingContext2D; 
 private drawWidth: number = 1900; private drawHeight: number = 900;
 navigationSubscription: any;
-private family: Person[];
+private family: Person[]; private keyID: string;
 private xPosn: number; private yPosn: number; private prevxPosn2: number; private prevyPosn2: number;private prevxPosn3: number; private prevyPosn3: number;
-number;private prevxPosn4: number; private prevyPosn4: number;
+private prevxPosn4: number; private prevyPosn4: number;
 private upDown: number = -1; private ySeparation  = 55; private line: number = 15;
 private startPersonID: string = "SheilaMaryPreece1953"; private currentPerson: Person; private previousPerson2: Person;private previousPerson3: Person;private previousPerson4: Person;
 private count2: number = 3;private count3: number = 5;private count4: number = 9;
@@ -29,28 +29,36 @@ private count2: number = 3;private count3: number = 5;private count4: number = 9
     this.navigationSubscription = this.router.events.subscribe((e: any) => {
       // If it is a NavigationEnd event re-initalise the component
       if (e instanceof NavigationEnd) {
-        this.route.data.subscribe(routeData => {
-          let data = routeData['data'];
-          if (data) {
-            this.family = data.people;
-          }
-        })
-        this.ctx = this.canvas.nativeElement.getContext('2d');
-        this.ctx.clearRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
-        this.ctx.fillStyle = "Linen";
-        this.ctx.fillRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
-        this.ctx.font = "24px Arial";
-        this.ctx.textAlign = "center";
-        this.ctx.fillStyle = "RebeccaPurple";
-        this.ctx.fillText("Welcome to the Preece - Woodhams Family Tree", this.drawWidth/2, 40);
-        this.ctx.font = "18px Arial";
-        this.ctx.fillText("Please click on a name in the tree to start a more detailed exploration", this.drawWidth/2, 70);
-        this.ctx.font = "15px Arial";
-        this.DrawGenerations();
+        this.route.paramMap.subscribe(route => {
+          this.keyID = route.get('personID');
+        });
+        if (this.keyID == null) {
+          this.route.data.subscribe(routeData => {
+            let data = routeData['data'];
+            if (data) {
+              this.family = data.people;
+            }
+          })
+          this.ctx = this.canvas.nativeElement.getContext('2d');
+          this.ctx.clearRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
+          this.ctx.fillStyle = "Linen";
+          this.ctx.fillRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
+          this.ctx.font = "24px Arial";
+          this.ctx.textAlign = "center";
+          this.ctx.fillStyle = "RebeccaPurple";
+          this.ctx.fillText("Welcome to the Preece - Woodhams Family Tree", this.drawWidth/2, 40);
+          this.ctx.font = "18px Arial";
+          this.ctx.fillText("Please click on a name in the tree to start a more detailed exploration", this.drawWidth/2, 70);
+          this.ctx.font = "15px Arial";
+          this.DrawGenerations();
+        }
       }
     });
   }
   ngOnInit(): void {
+    if (this.keyID != null) {
+      this.router.navigate(['family-chart/', this.keyID]);
+    }
   }
   private DrawGenerations() {
     for (let i = 0; i < 2; i++) {

@@ -53,6 +53,15 @@
           </mat-select>
     </mat-form-field>
     <br>
+    <mat-form-field style="width:300px" >
+      <mat-label>Spouse 3</mat-label>
+      <mat-select formControlName="spouse3"> 
+          <mat-option *ngFor="let person of people" [value] = "person.personID" >
+            {{person.personID}}
+          </mat-option>
+        </mat-select>
+  </mat-form-field>
+  <br>
     <mat-form-field class = widerFormField>
       <mat-label>Image</mat-label>
       <input matInput formControlName="personalImage">
