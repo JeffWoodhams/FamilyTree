@@ -435,12 +435,14 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
         events.push.apply(events, this.keyPerson2.events.filter(event => new Date(event.date) > keyDeathDate && event.description != "Marriage" && event.description != "Marriage3"));
       }
     }
-    let spouseDeathDate = new Date(this.keySpouse.events.find(event => event.description == "Death" || event.description == "Funeral").date)
-    if (this.keySpouse2) {
-      events.push.apply(events, this.keySpouse2.events.filter(event => new Date(event.date) > spouseDeathDate && event.single == true));
-    }
-    if (this.keySpouse3) {
-      events.push.apply(events, this.keySpouse3.events.filter(event => new Date(event.date) > spouseDeathDate && event.single == true));
+    if (this.keySpouse.events.find(event => event.description == "Death" || event.description == "Funeral")) {
+      let spouseDeathDate = new Date(this.keySpouse.events.find(event => event.description == "Death" || event.description == "Funeral").date)
+      if (this.keySpouse2) {
+        events.push.apply(events, this.keySpouse2.events.filter(event => new Date(event.date) > spouseDeathDate && event.single == true));
+      }
+      if (this.keySpouse3) {
+        events.push.apply(events, this.keySpouse3.events.filter(event => new Date(event.date) > spouseDeathDate && event.single == true));
+      }
     }
     events.sort(this.EventDateSort);
     return events;
