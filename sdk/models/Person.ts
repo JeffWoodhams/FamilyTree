@@ -13,6 +13,7 @@ export interface PersonInterface {
   "fatherID"?: string;
   "spouseID"?: string;
   "spouse2ID"?: string;
+  "spouse3ID"?: string;
   "personalImage"?: Array<any>;
   events?: Event[];
 }
@@ -26,6 +27,7 @@ export class Person implements PersonInterface {
   "fatherID": string;
   "spouseID": string;
   "spouse2ID": string;
+  "spouse3ID": string;
   "personalImage": Array<any>;
   events: Event[];
   constructor(data?: PersonInterface) {
@@ -91,6 +93,10 @@ export class Person implements PersonInterface {
         },
         "spouse2ID": {
           name: 'spouse2ID',
+          type: 'string'
+        },
+        "spouse3ID": {
+          name: 'spouse3ID',
           type: 'string'
         },
         "personalImage": {

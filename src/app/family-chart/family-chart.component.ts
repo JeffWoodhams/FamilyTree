@@ -29,24 +29,31 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
         this.keyPerson = this.family.find(person => person.personID == this.keyID);
         this.keySpouse = this.family.find(person => person.personID == this.keyPerson.spouseID);
         this.keySpouse2 = this.family.find(person => person.personID == this.keyPerson.spouse2ID);
+        this.keySpouse3 = this.family.find(person => person.personID == this.keyPerson.spouse3ID);
         if (this.keySpouse && this.keySpouse.spouse2ID && this.keySpouse.spouse2ID != this.keyPerson.personID) {
           this.keyPerson2 = this.family.find(person => person.personID == this.keySpouse.spouse2ID);
+        }
+        if (this.keySpouse && this.keySpouse.spouse3ID && this.keySpouse.spouse3ID != this.keyPerson.personID) {
+          this.keyPerson3 = data.people.find(person => person.personID == this.keySpouse.spouse3ID);
         }
         this.SetIDs();
         this.childIndex = 7; this.childTextWidth = 25;
         this.xValues = [591, 1301, 759, 393, 1477, 1121, 905, 100, 300, 500, 700, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3130, 3330 ];
         this.yValues = [50, 50, 50, 50, 50, 50, 50 ];
         this.indexComplete = [false, false];
-        this.children = this.family.filter(person => (person.fatherID == this.ids[0] && (person.motherID == this.ids[1] || person.motherID == this.ids[6] )) 
-        || ((person.motherID == this.ids[0] || person.motherID == this.ids[6] )&& person.fatherID == this.ids[1])
+        this.children = this.family.filter(person => (person.fatherID == this.ids[0] && (person.motherID == this.ids[1] || person.motherID == this.ids[6] || person.motherID == this.ids[7])) 
+        || ((person.motherID == this.ids[0] || person.motherID == this.ids[6] || person.motherID == this.ids[7]  )&& person.fatherID == this.ids[1])
+        || (person.motherID == this.ids[0] && person.fatherID == this.ids[6]) 
         || (this.keyPerson2 && person.motherID == this.keyPerson2.personID && person.fatherID == this.ids[1])).sort(this.PersonDateSort);
         this.children1 = this.children.filter(child => (child.fatherID == this.ids[0] && child.motherID == this.ids[1]) 
         || (child.motherID == this.ids[0] && child.fatherID == this.ids[1])).sort(this.PersonDateSort);
         this.children2 = this.children.filter(child => (child.fatherID == this.ids[0] && child.motherID == this.ids[6]) || (child.motherID == this.ids[0] && child.fatherID == this.ids[6]) 
         || (child.motherID == this.ids[6] && child.fatherID == this.ids[1]) || (this.keyPerson2 && child.motherID == this.keyPerson2.personID && child.fatherID == this.ids[1])).sort(this.PersonDateSort);
+        this.children3 = this.children.filter(child => (child.fatherID == this.ids[0] && child.motherID == this.ids[7]) || (child.motherID == this.ids[0] && child.fatherID == this.ids[7]) 
+        || (child.motherID == this.ids[7] && child.fatherID == this.ids[1]) || (this.keyPerson3 && child.motherID == this.keyPerson3.personID && child.fatherID == this.ids[1])).sort(this.PersonDateSort);
         if (this.children.length < 3){
           this.xValues[7] = 500;
-          this.xValues[8] = 1300;
+          this.xValues[8] = 1500;
           this.childWidth = 300
           this.childTextWidth = 40;
         }
@@ -88,14 +95,15 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
   private ctx: CanvasRenderingContext2D; 
   private parentWidth: number = 175; private keyWidth: number = 350; private childWidth: number = 180;
   private line: number = 20; private keyID: string;
-  private ids: string[] = ["keyID","spouseID",'motherID',"fatherID","spouseMotherID","spouseFatherID","spouse2ID"]
+  private ids: string[] = ["keyID","spouseID",'motherID',"fatherID","spouseMotherID","spouseFatherID","spouse2ID","spouse3ID"]
   private xValues: number[] = [591, 1301, 759, 393, 1477, 1121, 905, 100, 300, 500, 700, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3130, 3330 ]
   private yValues: number[] = [50, 50, 50, 50, 50, 50, 50 ]
   private childIDs: string[] = []; private childIndex: number = 7; private childTextWidth: number = 25;
   private keyPerson: Person; private keySpouse: Person; private keySpouse2: Person; private keyPerson2: Person;private family: Person[];
-  private children: Person[];  private children1: Person[];  private children2: Person[]; 
-  private eventTypes: string[] = ["Birth", "Christening", "Death", "Funeral", "Marriage", "Marriage2"];
-  private prefixes: string[] = ["Born", "Christened", "Died", "Buried", "Married", "Married"];
+  private keySpouse3: Person; private keyPerson3: Person;
+  private children: Person[];  private children1: Person[];  private children2: Person[]; private children3: Person[]; 
+  private eventTypes: string[] = ["Birth", "Christening", "Death", "Funeral", "Marriage", "Marriage2", "Marriage3"];
+  private prefixes: string[] = ["Born", "Christened", "Died", "Buried", "Married", "Married", "Married"];
   private keyMarriage: Event; private indexComplete: boolean[] = [false, false]
   private navigationSubscription: any;
 //#endregion
@@ -139,11 +147,14 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
       var person = this.family.find(person => person.personID == this.ids[i + 1]);
       if (person){
         this.ParentLinesDraw(startYValue, i);
-        if (this.keySpouse && (person.spouseID == this.keyPerson.motherID || person.spouseID == this.keySpouse.motherID)) {
+        if ( person.spouseID == this.keyPerson.motherID || (this.keySpouse && person.spouseID == this.keySpouse.motherID)) {
           var marriage = person.events.find(event => event.description == "Marriage")
         }
-        else{
+        else if ( person.spouse2ID == this.keyPerson.motherID || (this.keySpouse2 && person.spouseID == this.keySpouse2.motherID)){
           marriage = person.events.find(event => event.description == "Marriage2")
+        }
+        else {
+          marriage = person.events.find(event => event.description == "Marriage3")
         }
         if (marriage) {
           this.MainEventsDisplay(4, marriage, this.parentWidth, i/2 -1, "left", "", false, false)
@@ -210,23 +221,33 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
         this.ChildrenDisplay(event.images)
       }
       else if ( this.eventTypes.includes(event.description)){
-        if (event.description == "Marriage2") {
+        if (event.description == "Marriage2" || event.description == "Marriage3") {
           this.yValues[0] += 2 * this.line;
           this.yValues[1] += 2 * this.line;
-          if (event.personID == this.keyPerson.personID && this.keySpouse2) {
+          if (event.personID == this.keyPerson.personID && this.keySpouse2 && event.description == "Marriage2") {
             this.PersonDisplay(this.keySpouse2,1, 0, "top");
             this.AddRoutingClick(this.xValues[1], this.yValues[1], this.routingService, this.keySpouse2.personID)
+          }
+          else if (event.personID == this.keyPerson.personID && this.keySpouse3 && event.description == "Marriage3") {
+            this.PersonDisplay(this.keySpouse3,1, 0, "top");
+            this.AddRoutingClick(this.xValues[1], this.yValues[1], this.routingService, this.keySpouse3.personID)
           }
           else if (this.keyPerson2) {
             this.PersonDisplay(this.keyPerson2, 0, this.parentWidth, "top");
             this.AddRoutingClick(this.xValues[0] - this.parentWidth, this.yValues[0], this.routingService, this.keyPerson2.personID)
             this.yValues[0] += this.line;
           }
+          else if (this.keyPerson3) {
+            this.PersonDisplay(this.keyPerson3, 0, this.parentWidth, "top");
+            this.AddRoutingClick(this.xValues[0] - this.parentWidth, this.yValues[0], this.routingService, this.keyPerson3.personID)
+            this.yValues[0] += this.line;
+          }
           this.MainEventsDisplay(this.eventTypes.indexOf(event.description), event, this.parentWidth, 0, "top", "", false, event.single)
           this.indexComplete[1] = false;
           spouseIndex = 1;
         }
-        else if (this.keySpouse && event.personID == this.keySpouse.personID || (this.keySpouse2 && event.personID == this.keySpouse2.personID)) {
+        else if (this.keySpouse && event.personID == this.keySpouse.personID || (this.keySpouse2 && event.personID == this.keySpouse2.personID)
+        || (this.keySpouse3 && event.personID == this.keySpouse3.personID)) {
           this.yValues[1] += this.line;
           this.MainEventsDisplay(this.eventTypes.indexOf(event.description), event, 0, 1, "top", "", false, event.single)
         }
@@ -266,7 +287,7 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
         this.AddRoutingClick(this.xValues[this.childIndex] - this.childWidth/2, this.yValues[this.childIndex], this.routingService, child.personID)
         this.yValues[this.childIndex] += 0.5 * this.line;
         this.ChildLineSeparator();
-        var {spouse, spouse2, childEvents} = this.SpouseEvents(child);
+        var {spouse, spouse2, spouse3, childEvents} = this.SpouseEvents(child);
         childEvents.sort(this.EventDateSort).forEach(event =>{
           if ( this.eventTypes.includes(event.description)){
             if (event.description == "Marriage") {
@@ -281,10 +302,17 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
               this.AddRoutingClick(this.xValues[this.childIndex] - this.childWidth/2, this.yValues[this.childIndex], this.routingService, spouse2.personID)
               this.yValues[this.childIndex] += this.line;
             }
+            else if (event.description == "Marriage3") {
+              this.yValues[this.childIndex] += 2 * this.line;
+              if (spouse3) this.PersonDisplay(spouse3, this.childIndex, this.childWidth/2, "top");
+              this.AddRoutingClick(this.xValues[this.childIndex] - this.childWidth/2, this.yValues[this.childIndex], this.routingService, spouse3.personID)
+              this.yValues[this.childIndex] += this.line;
+            }
             var eventData = "";
             if (event.description == "Death" && event.personID != child.personID){
               if (spouse && event.personID == spouse.personID) eventData = spouse.name;
               else if (spouse2 && event.personID == spouse2.personID) eventData = spouse2.name;
+              else if (spouse3 && event.personID == spouse3.personID) eventData = spouse3.name;
               eventData += " died " + event.dateString;
             }
             this.MainEventsDisplay(this.eventTypes.indexOf(event.description), event, this.childWidth, this.childIndex, "top", eventData, true, event.single)
@@ -382,7 +410,7 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
   private PrepareEvents() {
     var events: Event[] = this.keyPerson.events.filter(event => new Date(event.date) > new Date(this.keyMarriage.date)).slice();
     var children: Person[] = this.children1;
-    for (let i = 0; i <= 1; i++) {
+    for (let i = 0; i <= 2; i++) {
       if (children.length > 0 && children[0].events.find(event => event.description == "Birth" || event.description == "Christening")) {
         var birthDate: Date = children[0].events.find(event => event.description == "Birth" || event.description == "Christening").date;
         var childStart = new Event();
@@ -391,21 +419,29 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
         childStart.images = children;
         events.push(childStart);
       }
-      children = this.children2;
+      if (i == 0) children = this.children2;
+      else children = this.children3;
     }
     if (this.keyPerson.events.find(event => event.description == "Death" || event.description == "Funeral")) {
       let keyDeathDate = new Date(this.keyPerson.events.find(event => event.description == "Death" || event.description == "Funeral").date)
+      let keyMarriageDate = new Date(this.keyPerson.events.find(event => event.description == "Marriage").date)
       if (this.keySpouse) {
         events.push.apply(events, this.keySpouse.events.filter(event => new Date(event.date) > keyDeathDate && (event.single == true || event.description == "Marriage2")));
-        events.push.apply(events, this.keySpouse.events.filter(event => event.single == true && new Date(event.date) < keyDeathDate));
+        events.push.apply(events, this.keySpouse.events.filter(event => event.single == true && new Date(event.date) < keyDeathDate && new Date(event.date) > keyMarriageDate));
       }
-      if (this.keyPerson2) {
+      else if (this.keyPerson2) {
         events.push.apply(events, this.keyPerson2.events.filter(event => new Date(event.date) > keyDeathDate && event.description != "Marriage" && event.description != "Marriage2"));
       }
+      else if (this.keyPerson3) {
+        events.push.apply(events, this.keyPerson2.events.filter(event => new Date(event.date) > keyDeathDate && event.description != "Marriage" && event.description != "Marriage3"));
+      }
     }
+    let spouseDeathDate = new Date(this.keySpouse.events.find(event => event.description == "Death" || event.description == "Funeral").date)
     if (this.keySpouse2) {
-      let spouseDeathDate = new Date(this.keySpouse.events.find(event => event.description == "Death" || event.description == "Funeral").date)
       events.push.apply(events, this.keySpouse2.events.filter(event => new Date(event.date) > spouseDeathDate && event.single == true));
+    }
+    if (this.keySpouse3) {
+      events.push.apply(events, this.keySpouse3.events.filter(event => new Date(event.date) > spouseDeathDate && event.single == true));
     }
     events.sort(this.EventDateSort);
     return events;
@@ -423,10 +459,15 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
     }
     var spouse2 = this.family.find(person => person.personID == child.spouse2ID);
     if (spouse2) {
-    var spouse2Death = spouse2.events.find(event => event.description == "Death" || event.description == "Funeral");
-    if (spouse2Death) childEvents.push(spouse2Death);
+      var spouse2Death = spouse2.events.find(event => event.description == "Death" || event.description == "Funeral");
+      if (spouse2Death) child.events.push(spouse2Death);
     }
-    return { spouse, spouse2, childEvents};
+    var spouse3 = this.family.find(person => person.personID == child.spouse3ID);
+    if (spouse3) {
+      var spouse3Death = spouse3.events.find(event => event.description == "Death" || event.description == "Funeral");
+      if (spouse3Death) child.events.push(spouse3Death);
+    }
+    return { spouse, spouse2, spouse3, childEvents};
   }
 //#endregion
 
@@ -605,6 +646,7 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
         this.ids[5] = this.keySpouse.fatherID;
       }
       this.ids[6] = this.keyPerson.spouse2ID;
+      this.ids[7] = this.keyPerson.spouse3ID;
   }
   private VerticalLinks(events: Event[], event: Event, spouseIndex: number, prevYValues: number[]) {
     let keyIndex = 0;
@@ -628,10 +670,14 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
                                                                       && (event.personID == this.ids[0] || (this.keyPerson2 && event.personID == this.keyPerson2.personID)));
     else if (this.keyPerson2 && event.personID == this.keyPerson2.personID) remainingEvents  = events.filter(event => events.indexOf(event) > latestIndex 
                                                                       && event.personID == this.keyPerson2.personID);
+    else if (this.keyPerson3 && event.personID == this.keyPerson3.personID) remainingEvents  = events.filter(event => events.indexOf(event) > latestIndex 
+                                                                      && event.personID == this.keyPerson3.personID);
     else if (event.personID == this.ids[1]) remainingEvents  = events.filter(event => events.indexOf(event) > latestIndex
-                                                                      && (event.personID == this.ids[1] || (this.keySpouse2 && event.personID == this.keySpouse2.personID)));
+                             && (event.personID == this.ids[1] || (this.keySpouse2 && event.personID == this.keySpouse2.personID)|| (this.keySpouse3 && event.personID == this.keySpouse3.personID)));
     else if (this.keySpouse2 && event.personID == this.keySpouse2.personID) remainingEvents  = events.filter(event => events.indexOf(event) > latestIndex
                                                                       && event.personID == this.keySpouse2.personID);
+    else if (this.keySpouse3 && event.personID == this.keySpouse3.personID) remainingEvents  = events.filter(event => events.indexOf(event) > latestIndex
+                                                                      && event.personID == this.keySpouse3.personID);
     if (remainingEvents.length == 0)
       this.indexComplete[keyIndex] = true;
     if (latestIndex != events.length - 1)
