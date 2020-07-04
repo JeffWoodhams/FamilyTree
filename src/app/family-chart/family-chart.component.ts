@@ -38,7 +38,7 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
         }
         this.SetIDs();
         this.childIndex = 7; this.childTextWidth = 25;
-        this.xValues = [591, 1301, 759, 393, 1477, 1121, 905, 100, 300, 500, 700, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3130, 3330 ];
+        this.xValues = [591, 1301, 759, 393, 1477, 1121, 905, 100, 293, 487, 680, 1230, 1430, 1630, 1830, 2030, 2230, 2430, 2630, 2830, 3030, 3230, 3430 ];
         this.yValues = [50, 50, 50, 50, 50, 50, 50 ];
         this.indexComplete = [false, false];
         this.children = this.family.filter(person => (person.fatherID == this.ids[0] && (person.motherID == this.ids[1] || person.motherID == this.ids[6] || person.motherID == this.ids[7])) 
@@ -253,7 +253,7 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
         }
         else  {
           this.yValues[0] += this.line;
-          this.MainEventsDisplay(this.eventTypes.indexOf(event.description), event, this.parentWidth, 0, "top", "", false, event.single)
+          this.MainEventsDisplay(this.eventTypes.indexOf(event.description), event, this.parentWidth - 20, 0, "top", "", false, event.single)
           spouseIndex = 1;
         }
       }
