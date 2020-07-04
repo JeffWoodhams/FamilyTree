@@ -38,12 +38,12 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
           }
           this.SetIDs();
           this.childIndex = 7; this.childTextWidth = 25;
-          this.xValues = [591, 1301, 759, 393, 1477, 1121, 905, 100, 300, 500, 700, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3130, 3330 ];
+          this.xValues = [591, 1301, 759, 393, 1477, 1121, 905, 100, 293, 487, 680, 1230, 1430, 1630, 1830, 2030, 2230, 2430, 2630, 2830, 3030, 3230, 3430 ];
           this.yValues = [50, 50, 50, 50, 50, 50, 50 ];
           this.indexComplete = [false, false];
           this.family = data.people;
           this.children = this.family.filter(person => (person.fatherID == this.ids[0] && (person.motherID == this.ids[1] || person.motherID == this.ids[6] || person.motherID == this.ids[7])) 
-          || ((person.motherID == this.ids[0] || person.motherID == this.ids[6] || person.motherID == this.ids[7]  )&& person.fatherID == this.ids[1])
+          || ((person.motherID == this.ids[0] || person.motherID == this.ids[6] || person.motherID == this.ids[7]) && person.fatherID == this.ids[1])
           || (person.motherID == this.ids[0] && person.fatherID == this.ids[6]) 
           || (this.keyPerson2 && person.motherID == this.keyPerson2.personID && person.fatherID == this.ids[1])).sort(this.PersonDateSort);
           this.children1 = this.children.filter(child => (child.fatherID == this.ids[0] && child.motherID == this.ids[1]) 
@@ -257,7 +257,7 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
         }
         else  {
           this.yValues[0] += this.line;
-          this.MainEventsDisplay(this.eventTypes.indexOf(event.description), event, this.parentWidth, 0, "top", "", false, event.single)
+          this.MainEventsDisplay(this.eventTypes.indexOf(event.description), event, this.parentWidth - 20, 0, "top", "", false, event.single)
           spouseIndex = 1;
         }
       }
@@ -429,10 +429,9 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
     }
     if (this.keyPerson.events.find(event => event.description == "Death" || event.description == "Funeral")) {
       let keyDeathDate = new Date(this.keyPerson.events.find(event => event.description == "Death" || event.description == "Funeral").date)
-      let keyMarriageDate = new Date(this.keyPerson.events.find(event => event.description == "Marriage").date)
       if (this.keySpouse) {
         events.push.apply(events, this.keySpouse.events.filter(event => new Date(event.date) > keyDeathDate && (event.single == true || event.description == "Marriage2")));
-        events.push.apply(events, this.keySpouse.events.filter(event => event.single == true && new Date(event.date) < keyDeathDate && new Date(event.date) > keyMarriageDate));
+        events.push.apply(events, this.keySpouse.events.filter(event => event.single == true && new Date(event.date) < keyDeathDate && new Date(event.date) > new Date(this.keyMarriage.date)));
       }
       else if (this.keyPerson2) {
         events.push.apply(events, this.keyPerson2.events.filter(event => new Date(event.date) > keyDeathDate && event.description != "Marriage" && event.description != "Marriage2"));
@@ -441,12 +440,14 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
         events.push.apply(events, this.keyPerson2.events.filter(event => new Date(event.date) > keyDeathDate && event.description != "Marriage" && event.description != "Marriage3"));
       }
     }
-    let spouseDeathDate = new Date(this.keySpouse.events.find(event => event.description == "Death" || event.description == "Funeral").date)
-    if (this.keySpouse2) {
-      events.push.apply(events, this.keySpouse2.events.filter(event => new Date(event.date) > spouseDeathDate && event.single == true));
-    }
-    if (this.keySpouse3) {
-      events.push.apply(events, this.keySpouse3.events.filter(event => new Date(event.date) > spouseDeathDate && event.single == true));
+    if (this.keySpouse.events.find(event => event.description == "Death" || event.description == "Funeral")) {
+      let spouseDeathDate = new Date(this.keySpouse.events.find(event => event.description == "Death" || event.description == "Funeral").date)
+      if (this.keySpouse2) {
+        events.push.apply(events, this.keySpouse2.events.filter(event => new Date(event.date) > spouseDeathDate && event.single == true));
+      }
+      if (this.keySpouse3) {
+        events.push.apply(events, this.keySpouse3.events.filter(event => new Date(event.date) > spouseDeathDate && event.single == true));
+      }
     }
     events.sort(this.EventDateSort);
     return events;

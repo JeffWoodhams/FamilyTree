@@ -35,7 +35,7 @@ export class AddEventComponent implements OnInit {
   people: Person[];
   isCreate: boolean;
   types: string[] = ["Census","Birth","Christening","Marriage","Death","Funeral","Marriage2","Marriage3", ""];
-  imageTypes: string[] = ["Census","Birth","Death","Map","Marriage", "Photo","Document","Newspaper","Memory",""];
+  imageTypes: string[] = ["Census","Birth","Death","Map","Marriage", "Photo","Document","Newspaper","Comment","Memory",""];
   filteredModals1: Observable<string[]>;
   filteredModals2: Observable<string[]>;
   filteredModals3: Observable<string[]>;
