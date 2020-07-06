@@ -269,7 +269,7 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
           }
           else {
             this.yValues[0] += this.line;
-            this.EventDisplay(event, 0, this.parentWidth, "top");
+            this.EventDisplay(event, 0, this.parentWidth - 20, "top");
             spouseIndex = 1;
           }
         }
