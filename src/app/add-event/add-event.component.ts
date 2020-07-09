@@ -185,7 +185,7 @@ export class AddEventComponent implements OnInit {
       if (data.description == "Marriage2") {
         data.eventID = this.personID + "M2";
       }
-      if (data.description == "Marriage3") {
+      else if (data.description == "Marriage3") {
         data.eventID = this.personID + "M3";
       }
       else if (this.types.includes(data.description) && data.description != "Census") {
