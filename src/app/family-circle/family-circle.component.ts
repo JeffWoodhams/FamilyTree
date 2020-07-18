@@ -17,13 +17,15 @@ export class FamilyCircleComponent implements OnInit {
 canvas: ElementRef<HTMLCanvasElement>;
 private ctx: CanvasRenderingContext2D; 
 private drawWidth: number = 1900; private drawHeight: number = 900;
+private scale = 4;S
 navigationSubscription: any;
 private family: Person[];
 private xPosn: number; private yPosn: number; private prevxPosn2: number; private prevyPosn2: number;private prevxPosn3: number; private prevyPosn3: number;
-number;private prevxPosn4: number; private prevyPosn4: number;
+private prevxPosn4: number; private prevyPosn4: number;private prevxPosn5: number; private prevyPosn5: number;
 private upDown: number = -1; private ySeparation  = 55; private line: number = 15;
-private startPersonID: string = "SheilaMaryPreece1953"; private currentPerson: Person; private previousPerson2: Person;private previousPerson3: Person;private previousPerson4: Person;
-private count2: number = 3;private count3: number = 5;private count4: number = 9;
+private startPersonID: string = "SheilaMaryPreece1953"; private currentPerson: Person; private previousPerson2: Person;private previousPerson3: Person;
+private previousPerson4: Person;private previousPerson5: Person;
+private count2: number = 1;private count3: number = 1;private count4: number = 1;private count5: number = 1;
 //#endregion
 
   constructor(private route: ActivatedRoute, private routingService: RoutingService, private router: Router){
@@ -56,10 +58,10 @@ private count2: number = 3;private count3: number = 5;private count4: number = 9
   private DrawGenerations() {
     for (let i = 0; i < 2; i++) {
       let startPerson = this.family.find(person => person.personID == this.startPersonID)
-      for (let j = 2; j < 5; j += 2) {
-        this.xPosn = this.drawWidth * j /6;
+      for (let j = 1; j < 4; j += 2) {
+        this.xPosn = this.drawWidth * j /this.scale;
         this.yPosn = this.drawHeight/2 + this.upDown * this.ySeparation;
-        if (j == 2) {
+        if (j == 1) {
           this.currentPerson = this.family.find(person => person.personID == startPerson.motherID);
         }
         else {
@@ -76,7 +78,7 @@ private count2: number = 3;private count3: number = 5;private count4: number = 9
         this.prevyPosn2 = this.yPosn;
         this.previousPerson2 = this.currentPerson;
         for (let k = this.count2; k < this.count2 + 3; k += 2) {
-          this.xPosn = this.drawWidth * k /12;
+          this.xPosn = this.drawWidth * k /(this.scale * 2);
           this.yPosn = this.drawHeight/2 + this.upDown * 2 * this.ySeparation;
           if (this.previousPerson2) {
             if (k == this.count2) {
@@ -94,7 +96,7 @@ private count2: number = 3;private count3: number = 5;private count4: number = 9
           this.prevyPosn3 = this.yPosn;
           this.previousPerson3 = this.currentPerson;
           for (let m = this.count3; m < this.count3 + 3; m += 2) {
-            this.xPosn = this.drawWidth * m /24;
+            this.xPosn = this.drawWidth * m /(this.scale * 4);
             this.yPosn = this.drawHeight/2 + this.upDown * 3 * this.ySeparation;
             if (this.previousPerson3) {
               if (m == this.count3) {
@@ -112,7 +114,7 @@ private count2: number = 3;private count3: number = 5;private count4: number = 9
             this.prevyPosn4 = this.yPosn;
             this.previousPerson4 = this.currentPerson;
             for (let p = this.count4; p < this.count4 + 3; p += 2) {
-              this.xPosn = this.drawWidth * p /48;
+              this.xPosn = this.drawWidth * p /(this.scale * 8);
               this.yPosn = this.drawHeight/2 + this.upDown * 4 * this.ySeparation;
               if (this.previousPerson4) {
                 if (p == this.count4) {
@@ -126,6 +128,26 @@ private count2: number = 3;private count3: number = 5;private count4: number = 9
                 this.PersonDisplay(this.currentPerson,this.xPosn,this.yPosn);
                 this.Connect(this.prevxPosn4, this.prevyPosn4 + this.upDown * 15, this.xPosn, this.yPosn, this.upDown)
               }
+              this.prevxPosn5 = this.xPosn;
+              this.prevyPosn5 = this.yPosn;
+              this.previousPerson5 = this.currentPerson;
+              for (let q = this.count5; q < this.count5 + 3; q += 2) {
+                this.xPosn = this.drawWidth * q /(this.scale * 16);
+                this.yPosn = this.drawHeight/2 + this.upDown * 5 * this.ySeparation;
+                if (this.previousPerson5) {
+                  if (q == this.count5) {
+                    this.currentPerson = this.family.find(person => person.personID == this.previousPerson5.motherID);
+                  }
+                  else {
+                    this.currentPerson = this.family.find(person => person.personID == this.previousPerson5.fatherID);
+                  }
+                }
+                if (this.currentPerson) {
+                  this.PersonDisplay(this.currentPerson,this.xPosn,this.yPosn);
+                  this.Connect(this.prevxPosn5, this.prevyPosn5 + this.upDown * 15, this.xPosn, this.yPosn, this.upDown)
+                }
+              }
+              this.count5 += 4;
             }
             this.count4 += 4;
           }
@@ -134,9 +156,10 @@ private count2: number = 3;private count3: number = 5;private count4: number = 9
         this.count2 += 4;
       }
       this.upDown = 1;
-      this.count2 = 3;
-      this.count3 = 5;
-      this.count4 = 9;
+      this.count2 = 1;
+      this.count3 = 1;
+      this.count4 = 1;
+      this.count5 = 1;
       this.startPersonID = "JefferyEdwinWoodhams1950";
     }
   }
