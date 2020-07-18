@@ -433,10 +433,10 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
         events.push.apply(events, this.keySpouse.events.filter(event => new Date(event.date) > keyDeathDate && (event.single == true || event.description == "Marriage2")));
         events.push.apply(events, this.keySpouse.events.filter(event => event.single == true && new Date(event.date) < keyDeathDate && new Date(event.date) > new Date(this.keyMarriage.date)));
       }
-      else if (this.keyPerson2) {
+      if (this.keyPerson2) {
         events.push.apply(events, this.keyPerson2.events.filter(event => new Date(event.date) > keyDeathDate && event.description != "Marriage" && event.description != "Marriage2"));
       }
-      else if (this.keyPerson3) {
+      if (this.keyPerson3) {
         events.push.apply(events, this.keyPerson2.events.filter(event => new Date(event.date) > keyDeathDate && event.description != "Marriage" && event.description != "Marriage3"));
       }
     }

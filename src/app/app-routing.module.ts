@@ -9,10 +9,11 @@ import { FamilyCircleComponent } from './family-circle/family-circle.component';
 const routes: Routes = [
   {
     path: '',
-    component: PeopleListComponent,
+    component: FamilyCircleComponent
+/*     component: PeopleListComponent,
     resolve: {
       data: PeopleListResolver
-    }
+    } */
   },
   {
     path: 'people-list/:personID',
