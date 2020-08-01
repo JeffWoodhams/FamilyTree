@@ -34,12 +34,12 @@
   <br>
     <mat-form-field class = widerFormField>
         <mat-label>Occupation</mat-label>
-        <input matInput formControlName="occupation">
+        <input type="text" matInput [formControl]="occupation" [matAutocomplete]="occupationAuto">
     </mat-form-field>
     <br>
     <mat-form-field class = widerFormField>
         <mat-label>Location</mat-label>
-        <input matInput formControlName="location">
+        <input type="text" matInput [formControl]="location" [matAutocomplete]="locationAuto">
     </mat-form-field>
     <br>
     <mat-form-field class = widerFormField>
@@ -121,6 +121,16 @@
     <mat-autocomplete #placeAuto="matAutocomplete">
       <mat-option *ngFor="let site of filteredPlaces | async" [value] = "site" >
         {{site}}
+      </mat-option>
+    </mat-autocomplete>
+    <mat-autocomplete #locationAuto="matAutocomplete">
+      <mat-option *ngFor="let location of filteredLocations | async" [value] = "location" >
+        {{location}}
+      </mat-option>
+    </mat-autocomplete>
+    <mat-autocomplete #occupationAuto="matAutocomplete">
+      <mat-option *ngFor="let occupation of filteredOccupations | async" [value] = "occupation" >
+        {{occupation}}
       </mat-option>
     </mat-autocomplete>
 </mat-dialog-content>

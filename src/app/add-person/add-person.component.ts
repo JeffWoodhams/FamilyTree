@@ -28,6 +28,8 @@ export class AddPersonComponent implements OnInit {
   people: Person[];
   events: Event[];
   placeList: string[] = [];
+  locationList: string[] = [];
+  occupationList: string[] = [];
   personEvent: Event;
   isCreate: boolean;
   title: string;
@@ -87,6 +89,14 @@ export class AddPersonComponent implements OnInit {
           this.placeList.push(event.place)
         }
         this.placeList.sort();
+        if (event.location && event.location != null && !this.locationList.includes(event.location)) {
+          this.locationList.push(event.location)
+        }
+        this.locationList.sort();
+        if (event.occupation && event.occupation != null && !this.occupationList.includes(event.occupation)) {
+          this.occupationList.push(event.occupation)
+        }
+        this.occupationList.sort();
         if (event.images) {
           for (let image of event.images) {
             if (!this.imageModals.includes(image.image)) {
@@ -133,7 +143,7 @@ export class AddPersonComponent implements OnInit {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;  
     dialogConfig.data = {
-      people: this.people, personID:this.personID, isCreate, imageModals:this.imageModals, placeList:this.placeList
+      people: this.people, personID:this.personID, isCreate, imageModals:this.imageModals, placeList:this.placeList, locationList:this.locationList, occupationList:this.occupationList
     };
     this.dialog.open(AddEventComponent, dialogConfig);
   }
@@ -145,7 +155,7 @@ export class AddPersonComponent implements OnInit {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;  
     dialogConfig.data = {
-      people: this.people, personID:this.personID, currentEvent, isCreate, imageModals:this.imageModals, placeList:this.placeList
+      people: this.people, personID:this.personID, currentEvent, isCreate, imageModals:this.imageModals, placeList:this.placeList, locationList:this.locationList, occupationList:this.occupationList
     };
     this.dialog.open(AddEventComponent, dialogConfig);
   }

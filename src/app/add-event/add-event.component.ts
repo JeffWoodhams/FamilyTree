@@ -26,11 +26,15 @@ export class AddEventComponent implements OnInit {
   eventID: string;
   date: Date;
   dateString: string;
-  occupation: string;
-  location:string;
+  occupation = new FormControl();
+  location = new FormControl();
   place = new FormControl();
   placeList: string[] = [];
+  locationList: string[] = [];
+  occupationList: string[] = [];
   filteredPlaces: Observable<string[]>;
+  filteredLocations: Observable<string[]>;
+  filteredOccupations: Observable<string[]>;
   images:any[];
   people: Person[];
   isCreate: boolean;
@@ -62,6 +66,8 @@ export class AddEventComponent implements OnInit {
     this.personID = data.personID;
     this.people = data.people;
     this.placeList = data.placeList;
+    this.locationList = data.locationList;
+    this.occupationList = data.occupationList;
     this.imageModals = data.imageModals;
     this.isCreate = data.isCreate;
     if (!this.isCreate) {
@@ -70,8 +76,8 @@ export class AddEventComponent implements OnInit {
       this.date = data.currentEvent.date;
       this.single = data.currentEvent.single;
       this.dateString = data.currentEvent.dateString;
-      this.occupation = data.currentEvent.occupation;
-      this.location = data.currentEvent.location;
+      this.occupation.setValue(data.currentEvent.occupation);
+      this.location.setValue(data.currentEvent.location);
       this.place.setValue(data.currentEvent.place);
       if (this.types.includes(data.currentEvent.description)) {
         this.type = data.currentEvent.description;
@@ -155,6 +161,16 @@ export class AddEventComponent implements OnInit {
       startWith(''),
       map(value => this._placeFilter(value))
     );
+    this.filteredLocations = this.location.valueChanges
+    .pipe(
+      startWith(''),
+      map(value => this._locationFilter(value))
+    );
+    this.filteredOccupations = this.occupation.valueChanges
+    .pipe(
+      startWith(''),
+      map(value => this._occupationFilter(value))
+    );
   }
   private _imageFilter(value: string): string[] {
     const filterValue = value.toLowerCase();
@@ -163,6 +179,14 @@ export class AddEventComponent implements OnInit {
   private _placeFilter(value: string): string[] {
     const filterValue = value.toLowerCase();
     return this.placeList.filter(site => site.toLowerCase().includes(filterValue));
+  }
+  private _locationFilter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.locationList.filter(site => site.toLowerCase().includes(filterValue));
+  }
+  private _occupationFilter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.occupationList.filter(site => site.toLowerCase().includes(filterValue));
   }
   submit() {
     var data : Event = new Event();
@@ -174,8 +198,11 @@ export class AddEventComponent implements OnInit {
       data.description = values.type;
     }
     data.personID = this.personID;
-    if (values.type == "Death" || values.type == "Funeral") {
-      data.single = true;
+    if (values.type == "Death" || values.type == "Funeral")  {
+      let person = this.people.find(person => person.personID == this.personID);
+      if (person.spouseID != null) {
+        data.single = true;
+      }
     }
     else {
       data.single = values.single;

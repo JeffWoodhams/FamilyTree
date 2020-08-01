@@ -313,13 +313,7 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
               this.AddRoutingClick(this.xValues[this.childIndex] - this.childWidth/2, this.yValues[this.childIndex], this.routingService, spouse3.personID)
               this.yValues[this.childIndex] += this.line;
             }
-            var eventData = "";
-            if (event.description == "Death" && event.personID != child.personID){
-              if (spouse && event.personID == spouse.personID) eventData = spouse.name;
-              else if (spouse2 && event.personID == spouse2.personID) eventData = spouse2.name;
-              else if (spouse3 && event.personID == spouse3.personID) eventData = spouse3.name;
-              eventData += " died " + event.dateString;
-            }
+            var eventData = this.DeathBurialEvent(event, child, spouse, spouse2, spouse3);
             this.MainEventsDisplay(this.eventTypes.indexOf(event.description), event, this.childWidth, this.childIndex, "top", eventData, true, event.single)
           }
           else {
@@ -330,7 +324,31 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
         this.childIndex++;
       });
   }
+
+
 //#region Display Functions
+private DeathBurialEvent(event: Event, child: Person, spouse: Person, spouse2: Person, spouse3: Person) {
+  var eventData = "";
+  if (event.description == "Death" && event.personID != child.personID) {
+    if (spouse && event.personID == spouse.personID)
+      eventData = spouse.name;
+    else if (spouse2 && event.personID == spouse2.personID)
+      eventData = spouse2.name;
+    else if (spouse3 && event.personID == spouse3.personID)
+      eventData = spouse3.name;
+    eventData += " died " + event.dateString;
+  }
+  else if (event.description == "Funeral" && event.personID != child.personID) {
+    if (spouse && event.personID == spouse.personID)
+      eventData = spouse.name;
+    else if (spouse2 && event.personID == spouse2.personID)
+      eventData = spouse2.name;
+    else if (spouse3 && event.personID == spouse3.personID)
+      eventData = spouse3.name;
+    eventData += " was buried " + event.dateString;
+  }
+  return eventData;
+}
   private EventDisplay(event: Event, personIndex: number, xOffset: number, imagePosition: string, child?: boolean) {
     var textWidth;
     ({ textWidth, xOffset } = this.EventSetup(event, personIndex, xOffset, child, event.single));
@@ -543,15 +561,15 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
     this.ctx.font = "13px Arial";
     this.ctx.fillStyle = "Purple";
     this.ctx.strokeStyle = "Purple";
-    this.ctx.fillText("Clicking on a person's name will", 20, 300);
-    this.ctx.fillText("re-focus the chart on that person", 20, 315);
-    this.ctx.fillText("Clicking on an icon will", 20, 335);
-    this.ctx.fillText("display the image for that event", 20, 350);
-    this.ctx.moveTo(12, 283);
-    this.ctx.lineTo(217, 283);
-    this.ctx.lineTo(217, 360);
-    this.ctx.lineTo(12, 360);
-    this.ctx.lineTo(12, 283);
+    this.ctx.fillText("Clicking on a person's name will", 20, 230);
+    this.ctx.fillText("re-focus the chart on that person", 20, 245);
+    this.ctx.fillText("Clicking on an icon will", 20, 265);
+    this.ctx.fillText("display the image for that event", 20, 280);
+    this.ctx.moveTo(12, 213);
+    this.ctx.lineTo(217, 213);
+    this.ctx.lineTo(217, 290);
+    this.ctx.lineTo(12, 290);
+    this.ctx.lineTo(12, 213);
     this.ctx.stroke();
     this.ctx.font = "15px Arial";
     this.ctx.fillStyle = "DarkBlue";
