@@ -127,6 +127,9 @@ export class AddPersonComponent implements OnInit {
     if (values.personalImage != null && values.personalImage != "") {
       let type = "Photo";
       let image = values.personalImage;
+      if (values.personalImage.substr(values.personalImage.length - 4) == "Life") {
+        type = "Document";
+      }
       data.personalImage = [{type, image}]
     }
     let promise = this.peopleService.upsertPerson(data);
