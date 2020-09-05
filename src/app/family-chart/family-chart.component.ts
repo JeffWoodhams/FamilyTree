@@ -417,7 +417,7 @@ private EventDisplay(event: Event, personIndex: number, xOffset: number, imagePo
   }
   private PersonDisplay(person: Person, personIndex: number, xOffset: number, imagePosition: string) {
     this.ctx.font = "bold 16px Arial";
-    this.ctx.fillText(person.name + " " + person.surname, this.xValues[personIndex] - xOffset, this.yValues[personIndex]);
+    this.ctx.fillText(person.name + " " + person.surname, this.xValues[personIndex] - xOffset,  this.yValues[personIndex]);
     if (person.personalImage) {
       this.ImagesDisplay(person.personalImage, personIndex, xOffset, imagePosition);
     }
