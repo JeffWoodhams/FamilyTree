@@ -130,6 +130,9 @@ export class AddPersonComponent implements OnInit {
       if (values.personalImage.substr(values.personalImage.length - 4) == "Life") {
         type = "Document";
       }
+      else if (values.personalImage.substr(values.personalImage.length - 4) == "Note") {
+        type = "Memory";
+      }
       data.personalImage = [{type, image}]
     }
     let promise = this.peopleService.upsertPerson(data);
