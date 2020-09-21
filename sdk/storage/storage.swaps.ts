@@ -1,3 +1,4 @@
+import { Injectable } from "@angular/core";
 /* tslint:disable */
 /**
  * @module Storage
@@ -44,6 +45,7 @@ export class BaseStorage {
  * This is mainly required because Angular Universal integration.
  * It does inject a CookieStorage instead of LocalStorage.
  **/
+@Injectable()
 export class InternalStorage extends BaseStorage {}
 /**
  * @module SDKStorage
