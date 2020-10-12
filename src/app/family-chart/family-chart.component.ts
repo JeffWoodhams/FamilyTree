@@ -324,8 +324,6 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
         this.childIndex++;
       });
   }
-
-
 //#region Display Functions
 private DeathBurialEvent(event: Event, child: Person, spouse: Person, spouse2: Person, spouse3: Person) {
   var eventData = "";
@@ -515,6 +513,7 @@ private DeathBurialEvent(event: Event, child: Person, spouse: Person, spouse2: P
       left: xValue,
       imageSource: imageRecord
     });
+    //modalService.add(imageRecord);
     drawCanvas.addEventListener('click', function (event) {
       var xVal = event.pageX, yVal = event.pageY;
       for (let ele of elements){
