@@ -413,6 +413,8 @@ private DeathBurialEvent(event: Event, child: Person, spouse: Person, spouse2: P
     if (event.place) {
       eventData += " in " + event.place;
     }
+    if (this.prefixes[j] == "Married" && event.place == " ")  eventData = "Unmarried"
+    if (this.prefixes[j] == "Died" && event.place == " ")  eventData = "Left"
     let noLines = this.WrapString(eventData, textWidth, this.xValues[personIndex] - xOffset, this.yValues[personIndex]);
     this.yValues[personIndex] += this.line;
     if (event.images) {
@@ -513,7 +515,7 @@ private DeathBurialEvent(event: Event, child: Person, spouse: Person, spouse2: P
       left: xValue,
       imageSource: imageRecord
     });
-    //modalService.add(imageRecord);
+    modalService.addRequired(imageRecord);
     drawCanvas.addEventListener('click', function (event) {
       var xVal = event.pageX, yVal = event.pageY;
       for (let ele of elements){

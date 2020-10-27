@@ -34,7 +34,11 @@ export class ModalComponent implements OnInit, OnDestroy {
         });
 
         // add self (this modal instance) to the modal service so it's accessible from controllers
-        this.modalService.add(this);
+        if (this.modalService.required.find(x => x == this.id))
+        {
+            this.modalService.add(this);
+        }
+
     }
 
     // remove self from modal service when component is destroyed

@@ -3,10 +3,16 @@
 @Injectable({ providedIn: 'root' })
 export class ModalService {
     private modals: any[] = [];
+    public required: string[] = [];
 
     add(modal: any) {
         // add modal to array of active modals
         this.modals.push(modal);
+    }
+    addRequired (id: string) {
+        if (!this.required.find(x => x == id)){
+        this.required.push(id);
+        }
     }
 
     remove(id: string) {
