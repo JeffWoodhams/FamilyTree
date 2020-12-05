@@ -575,6 +575,10 @@ private DeathBurialEvent(event: Event, child: Person, spouse: Person, spouse2: P
     this.ctx.font = "15px Arial";
     this.ctx.fillStyle = "DarkBlue";
     this.ctx.strokeStyle = "Plum";
+    this.AddIcon(12,85,"Map");
+    this.ctx.fillText("Key to Maps", 50, 100);
+    this.AddModalClick(12, 100, this.modalService, "WealdMapIndex");
+    this.modalService.addRequired("WealdMapIndex");
   }
   private ChildConnect() {
     this.ctx.beginPath();
