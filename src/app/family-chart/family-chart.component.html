@@ -1,5 +1,6 @@
 <div class="main-area" oncontextmenu="return false;">   
 <button routerLink=""> Return</button>  
+<button (click)="openFamilyCircle()"> Tree</button>  
 <canvas #canvas width="2500" height="4000" border-style="solid" onclick=""></canvas>
 <!-- #region Anscombe -->
 <!-- #region Allen Anscombe -->
@@ -869,6 +870,11 @@
     <img src="./assets/Cornford/Lucy Cornford Life Story.jpg">
     <button (click)="closeModal('LucyCornfordLife');">Close</button>
 </jw-modal>
+<jw-modal id="HoraceCornfordWill">
+    <iframe src="./assets/Cornford/Horace Cornford 1864 Will.pdf" width="100%" height="800px"></iframe>
+    <button (click)="closeModal('HoraceCornfordWill');">Close</button>
+</jw-modal>
+
 <!-- #endregion -->
 <!-- #region James Cornford 1775 -->
 <jw-modal id="JamesCornford1775Baptism">
@@ -1483,10 +1489,12 @@
 </jw-modal>
 <jw-modal id="JohnChatfieldBurial">
     <img src="./assets/Cornford/James Cornford 1775/John Chatfield Burial.jpg" >
+    <img src="./assets/Cornford/James Cornford 1775/John & Mary Chatfield Grave.jpg" >
     <button (click)="closeModal('JohnChatfieldBurial');">Close</button>
 </jw-modal>
 <jw-modal id="MaryChatfieldSuterBurial">
     <img src="./assets/Cornford/James Cornford 1775/Mary Chatfield [Suter] Burial.jpg" >
+    <img src="./assets/Cornford/James Cornford 1775/John & Mary Chatfield Grave.jpg" >
     <button (click)="closeModal('MaryChatfieldSuterBurial');">Close</button>
 </jw-modal>
 <jw-modal id="FannyBarrettBirthBaptism">
@@ -1553,7 +1561,12 @@
 </jw-modal>
 <jw-modal id="ThomasChatfieldBurial">
     <img src="./assets/Cornford/James Cornford 1775/Thomas Chatfield Burial.jpg" >
+    <img src="./assets/Cornford/James Cornford 1775/Thomas Chatfield Grave.jpg" >
     <button (click)="closeModal('ThomasChatfieldBurial');">Close</button>
+</jw-modal>
+<jw-modal id="ThomasChatfieldBaptism">
+    <img src="./assets/Cornford/James Cornford 1775/Thomas Chatfield Find A Grave.jpg" >
+    <button (click)="closeModal('ThomasChatfieldBaptism');">Close</button>
 </jw-modal>
 <jw-modal id="MarySuterBaptism">
     <img src="./assets/Cornford/James Cornford 1775/Mary Suter Baptism.jpg" >
@@ -1634,6 +1647,63 @@
 <jw-modal id="JosephCliftonBurial">
     <img src="./assets/Cornford/James Cornford 1775/Joseph Clifton Burial.jpg" >
     <button (click)="closeModal('JosephCliftonBurial');">Close</button>
+</jw-modal>
+<jw-modal id="PatienceDavisBurial">
+    <img src="./assets/Cornford/James Cornford 1775/Patience Davis Burial.jpg" >
+    <button (click)="closeModal('PatienceDavisBurial');">Close</button>
+</jw-modal>
+<jw-modal id="PatienceCliftonBirthBaptism">
+    <img src="./assets/Cornford/James Cornford 1775/Patience Clifton Birth Baptism.jpg" >
+    <button (click)="closeModal('PatienceCliftonBirthBaptism');">Close</button>
+</jw-modal>
+<jw-modal id="DinahClifton1851Census">
+    <img src="./assets/Cornford/James Cornford 1775/John Jones 1851 Census.jpg" >
+    <img src="./assets/Cornford/James Cornford 1775/John Jones 1851 Census 2.jpg" >
+    <button (click)="closeModal('DinahClifton1851Census');">Close</button>
+</jw-modal>
+<jw-modal id="DinahClifton1861Census">
+    <img src="./assets/Cornford/James Cornford 1775/Dinah Clifton 1861 Census.jpg" >
+    <button (click)="closeModal('DinahClifton1861Census');">Close</button>
+</jw-modal>
+<jw-modal id="RobertDavis1871Census">
+    <img src="./assets/Cornford/James Cornford 1775/Robert Davis 1871 Census.jpg" >
+    <button (click)="closeModal('RobertDavis1871Census');">Close</button>
+</jw-modal>
+<jw-modal id="RobertDavisDeath">
+    <img src="./assets/Cornford/James Cornford 1775/Robert Davis Death.jpg" >
+    <button (click)="closeModal('RobertDavisDeath');">Close</button>
+</jw-modal>
+<jw-modal id="DinahCliftonBurial">
+    <img src="./assets/Cornford/James Cornford 1775/Dinah Clifton Burial.jpg" >
+    <button (click)="closeModal('DinahCliftonBurial');">Close</button>
+</jw-modal>
+<jw-modal id="RobertDavisMarthaChatfieldMarriage">
+    <img src="./assets/Cornford/James Cornford 1775/Robert Davis Martha Chatfield Marriage.jpg" >
+    <button (click)="closeModal('RobertDavisMarthaChatfieldMarriage');">Close</button>
+</jw-modal>
+<jw-modal id="LucyLovett1939Register">
+    <img src="./assets/Cornford/James Cornford 1775/Lucy Lovett 1939 Register.jpg" >
+    <button (click)="closeModal('LucyLovett1939Register');">Close</button>
+</jw-modal>
+<jw-modal id="AnnNorwood1871Census">
+    <img src="./assets/Cornford/James Cornford 1775/Ann Norwood Martha Chatfield 1871 Census.jpg" >
+    <button (click)="closeModal('AnnNorwood1871Census');">Close</button>
+</jw-modal>
+<jw-modal id="LucyChatfield1881Census">
+    <img src="./assets/Cornford/James Cornford 1775/Lucy Chatfield 1881 Census.jpg" >
+    <button (click)="closeModal('LucyChatfield1881Census');">Close</button>
+</jw-modal>
+<jw-modal id="LucyChatfield1891Census">
+    <img src="./assets/Cornford/James Cornford 1775/Lucy Chatfield 1891 Census.jpg" >
+    <button (click)="closeModal('LucyChatfield1891Census');">Close</button>
+</jw-modal>
+<jw-modal id="WilliamLovettBirth">
+    <img src="./assets/Cornford/James Cornford 1775/William Lovett Birth.jpg" >
+    <button (click)="closeModal('WilliamLovettBirth');">Close</button>
+</jw-modal>
+<jw-modal id="WilliamLovettLucyChatfieldMarriage">
+    <img src="./assets/Cornford/James Cornford 1775/William Lovett Lucy Chatfield Marriage.jpg" >
+    <button (click)="closeModal('WilliamLovettLucyChatfieldMarriage');">Close</button>
 </jw-modal>
 <!-- #endregion -->
 <!-- #endregion -->
@@ -3106,9 +3176,27 @@
     <!-- #endregion -->
 <!-- #endregion -->
 <!-- #region Manser -->
-<jw-modal id="DanielManserMarriage">
+<!-- #region Daniel Manser -->
+<jw-modal id="DanielManserBirthBaptism">
+    <img src="./assets/Manser/Daniel Manser/Daniel Manser Birth.jpg" >
+    <button (click)="closeModal('DanielManserBirthBaptism');">Close</button>
+</jw-modal>
+<jw-modal id="DanielManserHarrietRogersMarriage">
     <img src="./assets/Manser/Daniel Manser/Daniel Manser Harriet Rogers Marriage.jpg" >
-    <button (click)="closeModal('DanielManserMarriage');">Close</button>
+    <button (click)="closeModal('DanielManserHarrietRogersMarriage');">Close</button>
+</jw-modal>
+<jw-modal id="ThomasManser1841Census">
+    <img src="./assets/Manser/Daniel Manser/Thomas Manser 1841 Census.jpg" >
+    <button (click)="closeModal('ThomasManser1841Census');">Close</button>
+</jw-modal>
+<jw-modal id="ThomasManser1851Census">
+    <img src="./assets/Manser/Daniel Manser/Thomas Manser 1851 Census 1.jpg" >
+    <img src="./assets/Manser/Daniel Manser/Thomas Manser 1851 Census 2.jpg" >
+    <button (click)="closeModal('ThomasManser1851Census');">Close</button>
+</jw-modal>
+<jw-modal id="DanielManser1861Census">
+    <img src="./assets/Manser/Daniel Manser/Daniel Manser 1861 Census.jpg" >
+    <button (click)="closeModal('DanielManser1861Census');">Close</button>
 </jw-modal>
 <jw-modal id="DanielManser1871Census">
     <img src="./assets/Manser/Daniel Manser/Daniel Manser 1871  Census.jpg" >
@@ -3131,6 +3219,18 @@
     <img src="./assets/Manser/Daniel Manser/Daniel Manser Lucy Bonds Marriage.jpg" >
     <button (click)="closeModal('DanielManserLucyEldridgeMarriage');">Close</button>
 </jw-modal>
+<jw-modal id="MaryAnnManserBaptism">
+    <img src="./assets/Manser/Daniel Manser/Mary Ann Manser Christening.jpg" >
+    <button (click)="closeModal('MaryAnnManserBaptism');">Close</button>
+</jw-modal>
+<!-- #endregion -->
+<!-- #region Rogers-->
+<jw-modal id="HarrietRogersBirthBaptism">
+    <img src="./assets/Manser/Daniel Manser/Harriet Rogers Baptism 1.jpg" >
+    <img src="./assets/Manser/Daniel Manser/Harriet Rogers Baptism 2.jpg" >
+    <button (click)="closeModal('HarrietRogersBirthBaptism');">Close</button>
+</jw-modal>
+<!-- #endregion -->
 <!-- #endregion -->
 <!-- #region Maps -->
 <jw-modal id="ArgosHill1899Map">
@@ -3139,8 +3239,12 @@
     <button (click)="closeModal('ArgosHill1899Map');">Close</button>
 </jw-modal>
 <jw-modal id="BattleDistrict1960Map">
-        <img src="./assets/Battle District 1960 Map.jpg">
-        <button (click)="closeModal('BattleDistrict1960Map');">Close</button>
+    <img src="./assets/Battle District 1960 Map.jpg">
+    <button (click)="closeModal('BattleDistrict1960Map');">Close</button>
+</jw-modal>
+<jw-modal id="Brighton1880Map">
+        <img src="./assets/Brighton 1880 Map.jpg">
+        <button (click)="closeModal('Brighton1880Map');">Close</button>
     </jw-modal>
 <jw-modal id="BroadGreen1913Map">
     <img src="./assets/Broad Green 1913 Map.jpg">

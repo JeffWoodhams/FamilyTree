@@ -744,5 +744,8 @@ private DeathBurialEvent(event: Event, child: Person, spouse: Person, spouse2: P
     }
     return noLines
   }
+  openFamilyCircle() {
+    this.router.navigate(['family-circle/',this.keyID]);
+  }
   //#endregion support
 }

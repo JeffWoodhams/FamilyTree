@@ -32,10 +32,10 @@ const routes: Routes = [
   {
     path: 'family-circle/:personID',
     component: FamilyCircleComponent,
-/*     resolve: {
+    resolve: {
       data: FamilyChartResolver
-    }, 
-    runGuardsAndResolvers: "paramsChange"*/
+    },
+    runGuardsAndResolvers: "paramsChange"
   }
 ];
 
