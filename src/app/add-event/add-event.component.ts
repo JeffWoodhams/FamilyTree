@@ -44,6 +44,8 @@ export class AddEventComponent implements OnInit {
   filteredModals2: Observable<string[]>;
   filteredModals3: Observable<string[]>;
   filteredModals4: Observable<string[]>;
+  filteredModals5: Observable<string[]>;
+  filteredModals6: Observable<string[]>;
   type: string;
   customType: string;
   imageModals: string[] = [];
@@ -55,6 +57,10 @@ export class AddEventComponent implements OnInit {
   image3 = new FormControl();
   imageType4: string;
   image4 = new FormControl();
+  imageType5: string;
+  image5 = new FormControl();
+  imageType6: string;
+  image6 = new FormControl();
   title: string;
   suffix: number;
 //#endregion
@@ -102,6 +108,14 @@ export class AddEventComponent implements OnInit {
           this.imageType4 = data.currentEvent.images[3].type;
           this.image4.setValue(data.currentEvent.images[3].image);
         }
+        if (data.currentEvent.images.length >= 5) {
+          this.imageType5 = data.currentEvent.images[4].type;
+          this.image5.setValue(data.currentEvent.images[4].image);
+        }
+        if (data.currentEvent.images.length >=6) {
+          this.imageType6 = data.currentEvent.images[5].type;
+          this.image6.setValue(data.currentEvent.images[5].image);
+        }
       }
     }
   }
@@ -122,10 +136,14 @@ export class AddEventComponent implements OnInit {
       image2:this.image2,
       image3:this.image3,
       image4:this.image4,
+      image5:this.image5,
+      image6:this.image6,
       imageType1:this.imageType1,
       imageType2:this.imageType2,
       imageType3:this.imageType3,
-      imageType4:this.imageType4
+      imageType4:this.imageType4,
+      imageType5:this.imageType5,
+      imageType6:this.imageType6
     });
 
     if (this.isCreate){
@@ -152,6 +170,16 @@ export class AddEventComponent implements OnInit {
       map(value => this._imageFilter(value))
     );
     this.filteredModals4 = this.image4.valueChanges
+    .pipe(
+      startWith(''),
+      map(value => this._imageFilter(value))
+    );
+    this.filteredModals5 = this.image5.valueChanges
+    .pipe(
+      startWith(''),
+      map(value => this._imageFilter(value))
+    );
+    this.filteredModals6 = this.image6.valueChanges
     .pipe(
       startWith(''),
       map(value => this._imageFilter(value))
@@ -249,6 +277,16 @@ export class AddEventComponent implements OnInit {
     if (values.image4 != null && values.image4 != "") {
       let type = values.imageType4;
       let image = values.image4;
+      data.images.push({type, image});
+    }
+    if (values.image5 != null && values.image5 != "") {
+      let type = values.imageType5;
+      let image = values.image5;
+      data.images.push({type, image});
+    }
+    if (values.image6 != null && values.image6 != "") {
+      let type = values.imageType6;
+      let image = values.image6;
       data.images.push({type, image});
     }
     const promise = this.eventService.upsertEvent(data);
