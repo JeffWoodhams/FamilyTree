@@ -33,6 +33,9 @@ export class FamilyChartComponent implements OnInit, OnDestroy{
           if (this.keySpouse && this.keySpouse.spouse2ID && this.keySpouse.spouse2ID != this.keyPerson.personID) {
             this.keyPerson2 = data.people.find(person => person.personID == this.keySpouse.spouse2ID);
           }
+          if (this.keySpouse2 && this.keySpouse2.spouse2ID && this.keySpouse2.spouse2ID != this.keyPerson.personID) {
+            this.keyPerson2 = data.people.find(person => person.personID == this.keySpouse2.spouse2ID);
+          }
           if (this.keySpouse && this.keySpouse.spouse3ID && this.keySpouse.spouse3ID != this.keyPerson.personID) {
             this.keyPerson3 = data.people.find(person => person.personID == this.keySpouse.spouse3ID);
           }
@@ -452,7 +455,14 @@ private DeathBurialEvent(event: Event, child: Person, spouse: Person, spouse2: P
         events.push.apply(events, this.keySpouse.events.filter(event => event.single == true && new Date(event.date) < keyDeathDate && new Date(event.date) > new Date(this.keyMarriage.date)));
       }
       if (this.keyPerson2) {
-        events.push.apply(events, this.keyPerson2.events.filter(event => new Date(event.date) > keyDeathDate && event.description != "Marriage" && event.description != "Marriage2"));
+        if (this.keySpouse2){
+          let keySpouse2MarriageDate = new Date(this.keySpouse2.events.find(event => event.description == "Marriage" || event.description == "Marriage2").date)
+          events.push.apply(events, this.keyPerson2.events.filter(event => new Date(event.date) > keySpouse2MarriageDate && event.description != "Marriage" && event.description != "Marriage2"));
+        }
+        else {
+          let keyPerson2MarriageDate = new Date(this.keyPerson2.events.find(event =>  event.description == "Marriage" || event.description == "Marriage2").date)
+          events.push.apply(events, this.keyPerson2.events.filter(event => new Date(event.date) > keyPerson2MarriageDate && event.description != "Marriage" && event.description != "Marriage2"));
+        }
       }
       if (this.keyPerson3) {
         events.push.apply(events, this.keyPerson2.events.filter(event => new Date(event.date) > keyDeathDate && event.description != "Marriage" && event.description != "Marriage3"));
@@ -461,7 +471,7 @@ private DeathBurialEvent(event: Event, child: Person, spouse: Person, spouse2: P
     if (this.keySpouse.events.find(event => event.description == "Death" || event.description == "Funeral")) {
       let spouseDeathDate = new Date(this.keySpouse.events.find(event => event.description == "Death" || event.description == "Funeral").date)
       if (this.keySpouse2) {
-        events.push.apply(events, this.keySpouse2.events.filter(event => new Date(event.date) > spouseDeathDate && event.single == true));
+        events.push.apply(events, this.keySpouse2.events.filter(event => new Date(event.date) > spouseDeathDate && event.single == true ));
       }
       if (this.keySpouse3) {
         events.push.apply(events, this.keySpouse3.events.filter(event => new Date(event.date) > spouseDeathDate && event.single == true));
