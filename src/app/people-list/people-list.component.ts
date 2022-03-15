@@ -10,7 +10,6 @@ import { EventService } from 'src/services/events.service';
   templateUrl: './people-list.component.html',
   styleUrls: ['./people-list.component.css']
 })
-
 export class PeopleListComponent implements OnInit{
 
   displayedColumns = ["name", "birthYear"];
